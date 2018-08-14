@@ -1,21 +1,26 @@
 {
-    "name": "notacomposta-str",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "start": "node ./bin/server.js"
-    },
-    "keywords": [],
-    "author": "ariusxi",
-    "dependencies": {
-        "body-parser": "^1.18.3",
-        "debug": "^3.1.0",
-        "express": "^4.16.3",
-        "http": "0.0.0",
-        "mongoose": "^5.2.7"
-    },
-    "devDependencies": {
-        "nodemon": "^1.18.3"
-    }
+  "name": "notamais",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "debug": "^3.1.0",
+    "express": "^4.16.3",
+    "guid": "0.0.12",
+    "http": "0.0.0",
+    "jsonwebtoken": "^7.4.0",
+    "md5": "^2.2.1",
+    "mongoose": "^5.2.7",
+    "sendgrid": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
 }
