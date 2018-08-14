@@ -9,3 +9,8 @@ exports.get = async() => {
     });
     return res;
 }
+
+exports.create = async(data) =>  {
+    var user = new User(data);
+    await user.save();
+}
