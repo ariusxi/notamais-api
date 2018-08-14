@@ -28,10 +28,12 @@ const schema = new Schema({
         type: Date,
         required: true,
     },
-    type: {
-        type: Number,
+    roles: [{
+        type: String,
         required: true,
-    },
+        enum: ['user', 'admin', 'employee', 'counter'],
+        default: 'user'
+    }],
 });
 
 module.exports = mongoose.model('User', schema);
