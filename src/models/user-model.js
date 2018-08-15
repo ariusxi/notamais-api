@@ -18,15 +18,17 @@ const schema = new Schema({
     },
     active: {
         type: Boolean,
-        required: true,
+        required: false,
+        default: false
     },
     confirmed: {
         type: Boolean,
-        required: true,
+        required: false,
+        default: false
     },
     createdAt: {
         type: Date,
-        required: true,
+        required: true
     },
     roles: [{
         type: String,
