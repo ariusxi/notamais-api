@@ -10,3 +10,5 @@ const authService = require('../services/auth-service');
 //definindo cada tipo de requisição
 router.get('/', authService.authorize, controller.get);
 router.post('/create', authService.authorize, controller.post);
+
+module.exports = router;
