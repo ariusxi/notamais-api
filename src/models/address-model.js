@@ -24,7 +24,7 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    neightborhood: {
+    neighborhood: {
         type: String,
         required: true
     },
