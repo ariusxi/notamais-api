@@ -43,6 +43,8 @@ app.use((req, res, next) => {
 //Atribuindo rotas
 app.use('/', indexroute);
 app.use('/users', userroute);
+app.use('/plans', planroute);
+app.use('/address', addressroute);
 
 //Exportando APP
 module.exports = app;
