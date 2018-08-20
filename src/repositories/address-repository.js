@@ -3,12 +3,37 @@
 const mongoose = require('mongoose');
 const Address = mongoose.model('Address');
 
-exports.get = async() =>  {
-    const res = await Address.find({});
+exports.get = async(id) =>  {
+    const res = await Address.findOne({
+        user: id
+    });
+    return res;
+}
+
+exports.getById = async(id) => {
+    const res  = await Address.findById(req.params.id);
     return res;
 }
 
 exports.create = async(data) => {
     var address = new Address(data);
     await address.save();
+}
+
+exports.update = async(id, data) => {
+    await Address.findByIdAndUpdate(id, {
+        $set: {
+            number: data.number,
+            cep: data.cep,
+            complement: data.complement,
+            public_place: data.public_place,
+            neighborhood: data.neighborhood,
+            city: data.city,
+            uf: data.city
+        }
+    });
+}
+
+exports.delete = async(id) => {
+    await Address.findOneAndRemove(id);
 }
