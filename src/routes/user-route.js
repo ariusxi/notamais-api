@@ -12,6 +12,9 @@ router.get('/fetch-all', controller.get);
 router.get('/confirmed/:id', controller.confirmed);
 router.get('/activate/:id', controller.activate);
 router.post('/create', controller.post);
+router.post('/create-admin', controller.postAdmin);
+router.post('/create-counter', controller.postCounter);
+router.post('/create-employee', controller.postEmployee);
 router.post('/auth', controller.authenticate);
 router.post('/refresh-token', controller.refreshToken);
 
