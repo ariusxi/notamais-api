@@ -59,6 +59,126 @@ exports.post = async(req, res, next) => {
     }
 }
 
+exports.postAdmin = async(req, res, next) => {
+    let contract = new ValidationContract();
+
+    //Validando dados
+    contract.isEmail(req.body.email, 'Você deve informar um e-mail válido');
+    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
+
+    if(!contract.isValid()){
+        res.status(400).send(contract.errors()).end();
+    }
+    
+    try{
+        //Inserindo usuário no banco
+        await repository.create({
+            name: req.body.name,
+            email: req.body.email,
+            password:  md5(req.body.password + global.SALT_KEY),
+            active: false,
+            confirmed: false,
+            createdAt: Date.now(),
+            roles: ["admin"]
+        });
+
+        emailService.send(
+            req.body.email,
+            'Bem vindo ao Nota Mais',
+            global.EMAIL_TMPL.replace('{0}', req.body.name)
+        );
+
+        res.status(201).send({
+            message: 'Cadastro efetuado com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.postCounter = async(req, res, next) => {
+    let contract = new ValidationContract();
+
+    //Validando dados
+    contract.isEmail(req.body.email, 'Você deve informar um e-mail válido');
+    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
+
+    if(!contract.isValid()){
+        res.status(400).send(contract.errors()).end();
+    }
+    
+    try{
+        //Inserindo usuário no banco
+        await repository.create({
+            name: req.body.name,
+            email: req.body.email,
+            password:  md5(req.body.password + global.SALT_KEY),
+            active: false,
+            confirmed: false,
+            createdAt: Date.now(),
+            roles: ["counter"]
+        });
+
+        emailService.send(
+            req.body.email,
+            'Bem vindo ao Nota Mais',
+            global.EMAIL_TMPL.replace('{0}', req.body.name)
+        );
+
+        res.status(201).send({
+            message: 'Cadastro efetuado com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.postEmployee = async(req, res, next) => {
+    let contract = new ValidationContract();
+
+    //Validando dados
+    contract.isEmail(req.body.email, 'Você deve informar um e-mail válido');
+    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
+
+    if(!contract.isValid()){
+        res.status(400).send(contract.errors()).end();
+    }
+    
+    try{
+        //Inserindo usuário no banco
+        await repository.create({
+            name: req.body.name,
+            email: req.body.email,
+            password:  md5(req.body.password + global.SALT_KEY),
+            active: false,
+            confirmed: false,
+            createdAt: Date.now(),
+            roles: ["employee"]
+        });
+
+        emailService.send(
+            req.body.email,
+            'Bem vindo ao Nota Mais',
+            global.EMAIL_TMPL.replace('{0}', req.body.name)
+        );
+
+        res.status(201).send({
+            message: 'Cadastro efetuado com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.authenticate = async(req, res, next) => {
     try{
         const user = await repository.authenticate({
