@@ -76,8 +76,8 @@ exports.postAdmin = async(req, res, next) => {
             name: req.body.name,
             email: req.body.email,
             password:  md5(req.body.password + global.SALT_KEY),
-            active: false,
-            confirmed: false,
+            active: true,
+            confirmed: true,
             createdAt: Date.now(),
             roles: ["admin"]
         });
