@@ -5,12 +5,12 @@ const repository = require('../repositories/address-repository');
 exports.get = async(req, res, next) => {
     try{
         var data = await repository.get();
-        res.status(500).send(data);
+        res.status(200).send(data);
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',
             data: e
-        });
+        })
     }
 }
 
@@ -19,11 +19,12 @@ exports.post = async(req, res, next) => {
         await repository.create(req.body);
 
         res.status(201).send({
-            message: 'Endereço cadastrado com sucesso'
+            message: 'Plano cadastrado com sucesso'
         });
     }catch(e){
         res.status(500).send({
-            message: 'Falha ao processar sua requisição'
+            message: 'Falha ao processar sua requisição',
+            data: e
         });
     }
 }

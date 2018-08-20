@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Address = mongoose.model('Address');
 
-exports.get = async() => {
+exports.get = async() =>  {
     const res = await Address.find({});
     return res;
 }
