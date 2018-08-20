@@ -3,8 +3,10 @@
 const mongoose = require('mongoose');
 const Address = mongoose.model('Address');
 
-exports.get = async() =>  {
-    const res = await Address.find({});
+exports.get = async(id) =>  {
+    const res = await Address.findOne({
+        user: id
+    });
     return res;
 }
 
