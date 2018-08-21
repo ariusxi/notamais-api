@@ -17,6 +17,7 @@ mongoose.connect(config.connectionString);
 const User = require('./models/user-model');
 const Plan = require('./models/plan-model');
 const Address = require('./models/address-model');
+const Recover = require('./models/recover-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');

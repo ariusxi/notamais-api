@@ -28,6 +28,13 @@ exports.getById = async(id) => {
     return res;
 }
 
+exports.getByEmail = async(email) => {
+    const res = await User.findOne({
+        email: email
+    });
+    return res;
+}
+
 exports.resetPassword = async(password, id) => {
     const res = await User.updateOne({ _id: id },{ password: password });
     return res;

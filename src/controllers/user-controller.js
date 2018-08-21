@@ -2,6 +2,7 @@
 
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
+const recoverrepository = require('../repositories/recover-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -45,7 +46,7 @@ exports.post = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', req.body.name)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
         );
 
         res.status(201).send({
@@ -85,7 +86,7 @@ exports.postAdmin = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', req.body.name)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
         );
 
         res.status(201).send({
@@ -125,7 +126,7 @@ exports.postCounter = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', req.body.name)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
         );
 
         res.status(201).send({
@@ -165,7 +166,7 @@ exports.postEmployee = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', req.body.name)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
         );
 
         res.status(201).send({
@@ -244,6 +245,51 @@ exports.refreshToken = async(req, res, next) => {
                 name: customer.name
             }
         });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.generateToken = async(req, res, next) => {
+    let contract = new ValidationContract();
+
+    contract.isEmail(req.body.email, 'Você deve informar um e-mail válido');
+
+    if(!contract.isValid()){
+        res.status(400).send(contract.errors()).end();
+    }
+
+    try{
+
+        let token = md5(Date.now() + global.SALT_KEY);
+
+        const user = await repository.getByEmail(req.body.email);
+
+        if(!user){
+            res.status(401).send({
+                message: 'Usuário não encontrado'
+            });
+            return;
+        }
+
+        await recoverrepository.create({
+            user: user._id,
+            token: token
+        });
+
+        emailService.send(
+            req.body.email,
+            'Recuperação de Senha',
+            global.EMAIL_TMPL.replace('{0}', token)
+        );
+
+        res.status(200).send({
+            message: 'Token gerado com sucesso'
+        });
+
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',

@@ -17,6 +17,7 @@ router.post('/create-counter', controller.postCounter);
 router.post('/create-employee', controller.postEmployee);
 router.post('/auth', controller.authenticate);
 router.post('/refresh-token', controller.refreshToken);
+router.post('/generate-token', controller.generateToken);
 
 //Rotas que precisam de token
 router.post('/reset-password/:id', authService.authorize, controller.updatePassword);
