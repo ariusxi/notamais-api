@@ -1,5 +1,5 @@
 global.SALT_KEY = 'f5b99242-6504-4ca3-90f2-05e78e5761ef';
-global.EMAIL_TMPL = 'Olá, <strong>{0}</strong>, seja bem vindo ao Nota Mais!';
+global.EMAIL_TMPL = '{0}';
 
 module.exports = {
     connectionString: 'mongodb://admin:master123@ds018268.mlab.com:18268/notamais',
