@@ -15,6 +15,7 @@ const schema = new Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     active: {
         type: Boolean,
