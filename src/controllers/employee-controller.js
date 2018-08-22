@@ -24,6 +24,7 @@ exports.post = async(req, res, next) => {
     try{
         //Inserindo funcionário no banco
         await personrepository.create({
+            name: req.body.name,
             gender: req.body.gender,
             nickname: req.body.nickname,
             cpf: req.body.cpf
@@ -59,6 +60,7 @@ exports.put = async(req, res, next) => {
 
         //Alterando dados de funcionário
         await personrepository.update({
+            name: req.body.name,
             gender: req.body.gender,
             nickname: req.body.nickname,
             cpf: cpf.body.cpf
