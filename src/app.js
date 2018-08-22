@@ -2,6 +2,7 @@
 
 //Importando módulos;
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const config = require('./config');
@@ -32,6 +33,7 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({ 
     extended: false
 }));
+app.use(fileUpload());
 
 //Habilita o CORS
 app.use((req, res, next) => {
