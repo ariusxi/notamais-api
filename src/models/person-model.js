@@ -8,6 +8,10 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String,
+        require: false
+    },
     nickname: {
         type: String,
         required: false
@@ -20,7 +24,7 @@ const schema = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false
     }
 });
 
