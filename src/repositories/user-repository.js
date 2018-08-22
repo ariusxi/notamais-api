@@ -12,7 +12,7 @@ exports.get = async() => {
 
 exports.create = async(data) =>  {
     var user = new User(data);
-    await user.save();
+    return await user.save();
 }
 
 exports.authenticate = async(data) => {

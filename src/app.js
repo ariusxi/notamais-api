@@ -16,6 +16,7 @@ mongoose.connect(config.connectionString);
 
 //Carregando Models
 const User = require('./models/user-model');
+const Person = require('./models/person-model');
 const Plan = require('./models/plan-model');
 const Address = require('./models/address-model');
 const Recover = require('./models/recover-model');
