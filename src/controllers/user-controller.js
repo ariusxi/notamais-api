@@ -3,6 +3,7 @@
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
 const recoverrepository = require('../repositories/recover-repository');
+const personrepository = require('../repositories/person-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -20,6 +21,18 @@ exports.get = async(req, res, next) => {
     }
 }
 
+exports.getProfile = async(req, res, next) => {
+    try{
+        var data = await personrepository.get(req.body.id);
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processsar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.post = async(req, res, next) => {
     let contract = new ValidationContract();
 
@@ -30,7 +43,7 @@ exports.post = async(req, res, next) => {
     if(!contract.isValid()){
         res.status(400).send(contract.errors()).end();
     }
-    
+
     try{
         //Inserindo usuário no banco
         await repository.create({
@@ -41,6 +54,15 @@ exports.post = async(req, res, next) => {
             confirmed: false,
             createdAt: Date.now(),
             roles: ["user"]
+        });
+
+        const user = await repository.getByEmail(req.body.email);
+
+        await personrepository.create({
+            gender: req.body.gender,
+            nickname: req.body.nickname,
+            cpf: req.body.cpf,
+            user: user._id
         });
 
         emailService.send(
@@ -58,6 +80,7 @@ exports.post = async(req, res, next) => {
             data: e
         });
     }
+    
 }
 
 exports.postAdmin = async(req, res, next) => {
@@ -81,6 +104,15 @@ exports.postAdmin = async(req, res, next) => {
             confirmed: true,
             createdAt: Date.now(),
             roles: ["admin"]
+        });
+
+        const user = await repository.getByEmail(req.body.email);
+
+        await personrepository.create({
+            gender: req.body.gender,
+            nickname: req.body.nickname,
+            cpf: req.body.cpf,
+            user: user._id
         });
 
         emailService.send(
@@ -123,6 +155,15 @@ exports.postCounter = async(req, res, next) => {
             roles: ["counter"]
         });
 
+        const user = await repository.getByEmail(req.body.email);
+
+        await personrepository.create({
+            gender: req.body.gender,
+            nickname: req.body.nickname,
+            cpf: req.body.cpf,
+            user: user._id
+        });
+
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
@@ -161,6 +202,15 @@ exports.postEmployee = async(req, res, next) => {
             confirmed: false,
             createdAt: Date.now(),
             roles: ["employee"]
+        });
+
+        const user = await repository.getByEmail(req.body.email);
+
+        await personrepository.create({
+            gender: req.body.gender,
+            nickname: req.body.nickname,
+            cpf: req.body.cpf,
+            user: user._id
         });
 
         emailService.send(
@@ -357,6 +407,12 @@ exports.updateProfile = async(req, res, next) => {
         await repository.updateProfile({
             name: req.body.name,
             email: req.body.email
+        }, req.params.id);
+
+        await personrepository.create({
+            gender: req.body.gender,
+            nickname: req.body.nickname,
+            cpf: req.body.cpf
         }, req.params.id);
 
         res.status(201).send({
