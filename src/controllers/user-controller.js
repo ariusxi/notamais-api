@@ -409,7 +409,7 @@ exports.updateProfile = async(req, res, next) => {
             email: req.body.email
         }, req.params.id);
 
-        await personrepository.create({
+        await personrepository.update({
             gender: req.body.gender,
             nickname: req.body.nickname,
             cpf: req.body.cpf
