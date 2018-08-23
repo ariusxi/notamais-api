@@ -5,7 +5,8 @@ const Recover = mongoose.model('Recover');
 
 exports.get = async(token) => {
     const res = await Recover.findOne({
-        token: token
+        token: token,
+        used: false
     });
     return res;
 }
@@ -13,4 +14,12 @@ exports.get = async(token) => {
 exports.create = async(data) => {
     var recover = new Recover(data);
     await recover.save();
+}
+
+
+exports.used = async(token) => {
+    const res = await Auth.updateMany({ token: token }, {
+        used: true
+    });
+    return res;
 }
