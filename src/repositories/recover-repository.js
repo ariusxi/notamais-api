@@ -3,11 +3,11 @@
 const mongoose = require('mongoose');
 const Recover = mongoose.model('Recover');
 
-exports.get = async(data) => {
+exports.get = async(token) => {
     const res = await Recover.find({
-        token: data.token,
-        data: data.user
+        token: token
     });
+    return res;
 }
 
 exports.create = async(data) => {

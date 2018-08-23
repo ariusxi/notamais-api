@@ -4,6 +4,7 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
+const tokenrepository = require('../repositories/token-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -339,6 +340,33 @@ exports.generateToken = async(req, res, next) => {
         res.status(200).send({
             message: 'Token gerado com sucesso'
         });
+
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.updatePasswordNonAuth = async(req, res, next) => {
+    let contract = new ValidationContract();
+
+    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
+
+    try{
+
+        const token = await recoverrepository.get(req.params.token);
+
+        if(!token){
+            res.status(401).send({
+                message: 'Token inválido'
+            });
+        }
+
+        let password = md5(req.body.password + global.SALT_KEY);
+
+        await repository.resetPassword(password, token.user);
 
     }catch(e){
         res.status(500).send({
