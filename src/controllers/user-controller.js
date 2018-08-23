@@ -4,7 +4,6 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
-const tokenrepository = require('../repositories/token-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -368,6 +367,9 @@ exports.updatePasswordNonAuth = async(req, res, next) => {
 
         await repository.resetPassword(password, token.user);
 
+        res.status(201).send({
+            message: 'Senha atualizada com sucesso'
+        });
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',
