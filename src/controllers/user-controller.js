@@ -4,7 +4,6 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
-const authrepository = require('../repositories/auth-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -250,13 +249,6 @@ exports.authenticate = async(req, res, next) => {
             email: user.email,
             name: user.name,
             roles: user.roles
-        });
-
-        await authrepository.save({
-            data: Date.now(),
-            ip: req.body.ip,
-            token: token,
-            user: user._id
         });
 
         res.status(201).send({
