@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Recover = mongoose.model('Recover');
 
 exports.get = async(token) => {
-    const res = await Recover.find({
+    const res = await Recover.findOne({
         token: token
     });
     return res;
