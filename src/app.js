@@ -21,6 +21,7 @@ const Plan = require('./models/plan-model');
 const Address = require('./models/address-model');
 const Recover = require('./models/recover-model');
 const Employee = require('./models/employee-model');
+const Auth = require('./models/auth-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');

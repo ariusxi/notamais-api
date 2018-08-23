@@ -4,6 +4,7 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
+const authrepository = require('../repositories/auth-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -251,6 +252,13 @@ exports.authenticate = async(req, res, next) => {
             roles: user.roles
         });
 
+        await authrepository.save({
+            data: Date.now(),
+            ip: req.body.ip,
+            token: token,
+            user: user._id
+        });
+
         res.status(201).send({
             token: token,
             data: {
@@ -285,7 +293,8 @@ exports.refreshToken = async(req, res, next) => {
         const tokenData = await authService.generateToken({
             id: user._id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            used: false
         });
 
         res.status(201).send({
@@ -365,6 +374,8 @@ exports.updatePasswordNonAuth = async(req, res, next) => {
         let password = md5(req.body.password + global.SALT_KEY);
 
         await repository.resetPassword(password, token.user);
+
+        await recoverrepository.used(req.params.token);
 
         res.status(201).send({
             message: 'Senha atualizada com sucesso'

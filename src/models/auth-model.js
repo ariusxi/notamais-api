@@ -4,14 +4,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
+    date: {
+        Type: Date
+    },
+    ip: {
+        type: String,
+        required: true
+    },
     token: {
         type: String,
-        required: true,
-    },
-    used: {
-        type: Boolean,
-        required: true,
-        default: false
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -20,4 +22,4 @@ const schema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Recover', schema);
+module.exports = mongoose.model('Auth', schema);
