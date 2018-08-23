@@ -18,7 +18,7 @@ exports.create = async(data) => {
 
 
 exports.used = async(token) => {
-    const res = await Auth.updateMany({ token: token }, {
+    const res = await Recover.updateMany({ token: token }, {
         used: true
     });
     return res;
