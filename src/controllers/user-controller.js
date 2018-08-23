@@ -354,7 +354,6 @@ exports.updatePasswordNonAuth = async(req, res, next) => {
     contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
 
     try{
-
         const token = await recoverrepository.get(req.params.token);
 
         if(!token){
