@@ -348,6 +348,36 @@ exports.generateToken = async(req, res, next) => {
     }
 }
 
+exports.updatePasswordNonAuth = async(req, res, next) => {
+    let contract = new ValidationContract();
+
+    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
+
+    try{
+
+        const token = await recoverrepository.get(req.params.token);
+
+        if(!token){
+            res.status(401).send({
+                message: 'Token inválido'
+            });
+        }
+
+        let password = md5(req.body.password + global.SALT_KEY);
+
+        await repository.resetPassword(password, token.user);
+
+        res.status(201).send({
+            message: 'Senha atualizada com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.updatePassword = async(req, res, next) => {
     let contract = new ValidationContract();
 
