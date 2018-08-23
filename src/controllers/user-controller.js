@@ -359,10 +359,10 @@ exports.generateToken = async(req, res, next) => {
 
 exports.updatePasswordNonAuth = async(req, res, next) => {
     let contract = new ValidationContract();
-
-    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
-
+    
     try{
+        contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
+
         const token = await recoverrepository.get(req.params.token);
 
         if(!token){
@@ -386,6 +386,8 @@ exports.updatePasswordNonAuth = async(req, res, next) => {
             data: e
         });
     }
+    
+    
 }
 
 exports.updatePassword = async(req, res, next) => {
