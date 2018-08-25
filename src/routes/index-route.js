@@ -9,4 +9,6 @@ router.get('/', controller.get);
 
 router.post('/', controller.post);
 
+//router.get('/payment', controller.payment);
+
 module.exports = router;
