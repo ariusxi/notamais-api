@@ -19,10 +19,11 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
+        let text = req.body.text + "<br/><br/> De: "+req.body.email;
         emailService.send(
             'notamais2018@gmail.com',
             req.body.title,
-            global.EMAIL_TMPL.replace('{0}', req.body.text)
+            global.EMAIL_TMPL.replace('{0}', text)
         );
 
         res.status(200).send({
