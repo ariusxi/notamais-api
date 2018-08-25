@@ -20,7 +20,7 @@ exports.get = async(req, res, next) => {
 exports.post = async(req, res, next) => {
     try{
         emailService.send(
-            'notaplus@gmail.com',
+            'notamais2018@gmail.com',
             req.body.title,
             global.EMAIL_TMPL.replace('{0}', req.body.text)
         );

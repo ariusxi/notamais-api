@@ -7,7 +7,7 @@ module.exports = {
     containerConnectionString: 'TBD',
     paramsCielo: {
         'MerchantId': '724941ed-a97f-4d24-8d40-7f8aee02bc86',
-        'MerchantKey': '',
+        'MerchantKey': '724941ed-a97f-4d24-8d40-7f8aee02bc86',
         'RequestId': 'xxxxxxx', // Opcional - Identificação do Servidor na Cielo
         'sandbox': true, // Opcional - Ambiente de Testes
         'debug': true // Opcional - Exibe os dados enviados na requisição para a Cielo
