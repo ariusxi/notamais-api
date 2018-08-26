@@ -2,6 +2,7 @@
 
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/user-repository');
+const clientrepository = require('../repositories/client-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
 const authrepository = require('../repositories/auth-repository');
@@ -24,11 +25,23 @@ exports.get = async(req, res, next) => {
 
 exports.getProfile = async(req, res, next) => {
     try{
-        var data = await personrepository.get(req.body.id);
+        var data = await personrepository.get(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processsar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.getClient = async(req, res, next) => {
+    try{
+        var data = await clientrepository.get(req.params.id);
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
             data: e
         });
     }
@@ -59,10 +72,18 @@ exports.post = async(req, res, next) => {
 
         const user = await repository.getByEmail(req.body.email);
 
-        await personrepository.create({
+        await personrepository.create({ 
             gender: req.body.gender,
             nickname: req.body.nickname,
             cpf: req.body.cpf,
+            user: user._id
+        });
+
+        await clientrepository.create({
+            fantasia: req.body.fantasia,
+            cnpj: req.body.cnpj,
+            ie: req.body.ie,
+            telephone: req.body.telephone,
             user: user._id
         });
 
@@ -461,6 +482,15 @@ exports.updateProfile = async(req, res, next) => {
             nickname: req.body.nickname,
             cpf: req.body.cpf
         }, req.params.id);
+
+        if(user.roles[0] == 'user'){
+            await clientrepository.put({
+                fantasia: req.body.fantasia,
+                cnpj: req.body.cnpj,
+                ie: req.body.ie,
+                telephone: req.body.telephone
+            }, req.params.id);
+        }
 
         res.status(201).send({
             message: 'Perfil atualizado com sucesso'

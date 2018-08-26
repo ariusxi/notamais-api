@@ -11,6 +11,7 @@ const authService = require('../services/auth-service');
 router.get('/', controller.get);
 
 //Rotas que precisam de nivel de acesso
+router.get('/get/:id', authService.isAdmin, controller.getById);
 router.get('/delete/:id', authService.isAdmin, controller.delete);
 router.post('/create', authService.isAdmin, controller.post);
 router.post('/update/:id', authService.isAdmin, controller.put);
