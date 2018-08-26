@@ -21,6 +21,8 @@ router.post('/generate-token', controller.generateToken);
 router.post('/update-password/:token', controller.updatePasswordNonAuth);
 
 //Rotas que precisam de token
+router.get('/get-profile/:id', authService.authorize, controller.getProfile);
+router.get('/get-client/:id', authService.authorize, controller.getClient);
 router.post('/reset-password/:id', authService.authorize, controller.updatePassword);
 router.post('/update-profile/:id', authService.authorize, controller.updateProfile);
 

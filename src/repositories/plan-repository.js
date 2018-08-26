@@ -8,6 +8,11 @@ exports.get = async() =>  {
     return res;
 }
 
+exports.getById = async(id) => {
+    const res = await Plan.findById(id);
+    return res;
+}
+
 exports.create = async(data) => {
     var plan = new Plan(data);
     await plan.save();

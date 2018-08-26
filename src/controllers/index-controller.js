@@ -4,17 +4,10 @@ const emailService = require('../services/email-service');
 const cieloService = require('../services/cielo-service');
 
 exports.get = async(req, res, next) => {
-    try{
-        cieloService.createTransaction();
-        res.status(200).send({
-            message: 'Sucesso'
-        });
-    }catch(e){
-        res.status(500).send({
-           message: 'Falha  ao processar sua requisição',
-           data: e 
-        });
-    }
+    res.status(200).send({
+        title: 'Node Store API',
+        version: "0.0.4"
+    });
 }
 
 exports.post = async(req, res, next) => {
@@ -37,9 +30,6 @@ exports.post = async(req, res, next) => {
     }
 }
 
-exports.payment = async(req, body, next) => {
-    res.status(200).send({
-        title: 'Node Store API',
-        version: "0.0.4"
-    });
+exports.payment = async(req, res, next) => {
+    cieloService.paymentBoleto();
 }
