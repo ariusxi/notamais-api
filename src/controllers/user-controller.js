@@ -316,7 +316,7 @@ exports.generateToken = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Recuperação de Senha',
-            global.EMAIL_TMPL.replace('{0}', token)
+            global.EMAIL_TMPL.replace('{0}', 'http://localhost:8080/WNotaMais/views/new-password.jsp?token='+token)
         );
 
         res.status(200).send({
