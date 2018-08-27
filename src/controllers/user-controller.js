@@ -204,35 +204,6 @@ exports.postCounter = async(req, res, next) => {
     }
 }
 
-exports.postEmployee = async(req, res, next) => {
-  
-    try{
-        await personrepository.create({
-            name: req.body.name,
-            gender: req.body.gender,
-            nickname: req.body.nickname,
-            cpf: req.body.cpf,
-            user: req.params.id
-        });
-
-        const person = await personrepository.getByCpf(req.body.cpf);
-
-        await employeerepository.post({
-            admin: false,
-            person: person._id,
-            user: req.params.id
-        }); 
-
-        res.status(201).send({
-            message: 'Cadastro efetuado com sucesso'
-        });
-    }catch(e){
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
-    }
-}
 
 exports.authenticate = async(req, res, next) => {
     try{

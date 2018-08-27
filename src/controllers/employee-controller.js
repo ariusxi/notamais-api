@@ -22,27 +22,29 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
-        //Inserindo funcionário no banco
         await personrepository.create({
             name: req.body.name,
             gender: req.body.gender,
             nickname: req.body.nickname,
-            cpf: req.body.cpf
+            cpf: req.body.cpf,
+            user: req.params.id
         });
 
         const person = await personrepository.getByCpf(req.body.cpf);
 
-        await repository.create({
+        await repository.post({
+            admin: false,
             person: person._id,
             user: req.params.id
-        });
+        }); 
 
-        res.status(200).send({
-            message: 'Funcionário cadastrado com sucesso'
+        res.status(201).send({
+            message: 'Funcionario cadastrado com sucesso'
         });
     }catch(e){
         res.status(500).send({
-            message: 'Falha ao processar sua requisição'
+            message: 'Falha ao processar sua requisição',
+            data: e
         });
     }
 }
