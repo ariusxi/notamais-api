@@ -5,6 +5,7 @@ const repository = require('../repositories/user-repository');
 const clientrepository = require('../repositories/client-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
+const employeerepository = require('../repositories/employee-repository');
 const authrepository = require('../repositories/auth-repository');
 const md5 = require('md5');
 
@@ -215,31 +216,21 @@ exports.postEmployee = async(req, res, next) => {
     }
     
     try{
-        //Inserindo usuário no banco
-        await repository.create({
-            name: req.body.name,
-            email: req.body.email,
-            password:  md5(req.body.password + global.SALT_KEY),
-            active: false,
-            confirmed: false,
-            createdAt: Date.now(),
-            roles: ["employee"]
-        });
-
-        const user = await repository.getByEmail(req.body.email);
-
         await personrepository.create({
+            name: req.body.name,
             gender: req.body.gender,
             nickname: req.body.nickname,
             cpf: req.body.cpf,
-            user: user._id
+            user: req.params.id
         });
 
-        emailService.send(
-            req.body.email,
-            'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
-        );
+        const person = await personrepository.getByCpf(req.body.cpf);
+
+        await employeerepository.post({
+            admin: false,
+            person: person._id,
+            user: req.params.id
+        }); 
 
         res.status(201).send({
             message: 'Cadastro efetuado com sucesso'

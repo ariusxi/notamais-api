@@ -10,6 +10,13 @@ exports.get = async(id)  => {
     return res;
 }
 
+exports.getByCpf = async(cpf) => {
+    const res = await Person.find({
+        cpf: cpf
+    });
+    return res;
+}
+
 exports.create = async(data) => {
     var person = new Person(data);
     await person.save();
