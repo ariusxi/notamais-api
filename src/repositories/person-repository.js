@@ -11,7 +11,7 @@ exports.get = async(id)  => {
 }
 
 exports.getByCpf = async(cpf) => {
-    const res = await Person.find({
+    const res = await Person.findOne({
         cpf: cpf
     });
     return res;
