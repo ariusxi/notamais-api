@@ -205,16 +205,7 @@ exports.postCounter = async(req, res, next) => {
 }
 
 exports.postEmployee = async(req, res, next) => {
-    let contract = new ValidationContract();
-
-    //Validando dados
-    contract.isEmail(req.body.email, 'Você deve informar um e-mail válido');
-    contract.hasMinLen(req.body.password, 6, 'A sua senha deve ser mais que 6 dígitos');
-
-    if(!contract.isValid()){
-        res.status(400).send(contract.errors()).end();
-    }
-    
+  
     try{
         await personrepository.create({
             name: req.body.name,

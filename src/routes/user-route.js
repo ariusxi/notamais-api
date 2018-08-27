@@ -14,7 +14,7 @@ router.get('/activate/:id', controller.activate);
 router.post('/create', controller.post);
 router.post('/create-admin', controller.postAdmin);
 router.post('/create-counter', controller.postCounter);
-router.post('/create-employee', controller.postEmployee);
+router.post('/create-employee/:id', controller.postEmployee);
 router.post('/auth', controller.authenticate);
 router.post('/refresh-token', controller.refreshToken);
 router.post('/generate-token', controller.generateToken);
