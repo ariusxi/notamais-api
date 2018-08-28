@@ -445,6 +445,10 @@ exports.updateProfile = async(req, res, next) => {
             }, req.params.id);
         }
 
+        if(req.body.password){
+            await repository.resetPassword(password, req.params.id);
+        }
+
         res.status(201).send({
             message: 'Perfil atualizado com sucesso'
         });
