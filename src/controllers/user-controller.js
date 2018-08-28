@@ -446,7 +446,7 @@ exports.updateProfile = async(req, res, next) => {
         }
 
         if(req.body.password && req.body.password != ""){
-            let password = req.body.password;
+            let password = md5(req.body.password + global.SALT_KEY);
             await repository.resetPassword(password, req.params.id);
         }
 
