@@ -18,8 +18,7 @@ const schema = new Schema({
     },
     cpf: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
