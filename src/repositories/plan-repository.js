@@ -19,14 +19,13 @@ exports.create = async(data) => {
 }
 
 exports.update = async(id, data) => {
-    await Plan.findByIdAndUpdate(id, {
-        $set: {
-            name: data.name,
-            description: data.description,
-            value: data.value,
-            qtdeXML: data.qtdeXML
-        }
+    const res = await Plan.updateOne({ _id: id},{
+        name: data.name,
+        description: data.description,
+        value: data.value,
+        qtdeXML: data.qtdeXML
     });
+    return res;
 }
 
 exports.delete = async(id) => {
