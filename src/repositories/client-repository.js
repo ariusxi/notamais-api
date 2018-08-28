@@ -16,7 +16,7 @@ exports.create = async(data) =>  {
 }
 
 exports.put = async(data, id) =>  {
-    const res = await Client.updateMany({ _id:  id } , {
+    const res = await Client.updateOne({ user:  id } , {
         fantasia: data.fantasia,
         cnpj: data.cnpj,
         ie: data.ie,

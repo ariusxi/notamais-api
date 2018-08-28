@@ -23,7 +23,7 @@ exports.create = async(data) => {
 }
 
 exports.update = async(data, id) =>  {
-    const res = await Person.updateMany({ user: id}, {
+    const res = await Person.updateOne({ user: id}, {
         gender: data.gender,
         nickname: data.nickname,
         cpf: data.cpf

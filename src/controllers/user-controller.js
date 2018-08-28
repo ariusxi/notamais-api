@@ -445,14 +445,14 @@ exports.updateProfile = async(req, res, next) => {
             }, req.params.id);
         }
 
-        if(req.body.password){
+        if(req.body.password && req.body.password != ""){
+            let password = req.body.password;
             await repository.resetPassword(password, req.params.id);
         }
 
         res.status(201).send({
             message: 'Perfil atualizado com sucesso'
         });
-
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',
