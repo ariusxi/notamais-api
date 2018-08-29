@@ -15,4 +15,6 @@ router.get('/get-payment', controller.getPayment);
 
 router.get('/cancel-payment', controller.cancelPayment);
 
+router.post('/upload-photo', controller.photo);
+
 module.exports = router;
