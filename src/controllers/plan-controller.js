@@ -14,6 +14,18 @@ exports.get = async(req, res, next) => {
     }
 }
 
+exports.getAdmin = async(req, res, next) => {
+    try{
+        var data = await repository.getAdmin();
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.getById = async(req, res, next) =>  {
     try{
         var data = await repository.getById(req.params.id);
@@ -28,7 +40,22 @@ exports.getById = async(req, res, next) =>  {
 
 exports.post = async(req, res, next) => {
     try{
-        await repository.create(req.body);
+
+        const plan = repository.getByQtdeXML(req.body.qtdeXML);
+
+        if(plan){
+            res.status(400).send({
+                message: 'Já existe um plano com essa quantidade de XML'
+            });
+        }
+
+        await repository.create({
+            name: req.body.name,
+            description: req.body.description,
+            value: req.body.value,
+            qtdeXML: req.body.qtdeXML,
+            active: true
+        });
 
         res.status(201).send({
             message: 'Plano cadastrado com sucesso'
@@ -63,6 +90,23 @@ exports.delete = async(req, res, next) => {
         });
     }catch(e){
         res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.activate = async(req, res, next) => {
+    try{
+        await repository.active(req.params.id, {
+            active: req.body.active
+        });
+
+        res.status(200).send({
+            message: 'Status de plano alterado com sucesso'
+        });
+    }catch(e){
+        res.status(200).send({
             message: 'Falha ao processar sua requisição',
             data: e
         });
