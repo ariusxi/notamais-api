@@ -4,6 +4,13 @@ const mongoose = require('mongoose');
 const Plan = mongoose.model('Plan');
 
 exports.get = async() =>  {
+    const res = await Plan.find({
+        active: true
+    });
+    return res;
+}
+
+exports.getAdmin = async() => {
     const res = await Plan.find({});
     return res;
 }
@@ -26,6 +33,12 @@ exports.update = async(id, data) => {
         qtdeXML: data.qtdeXML
     });
     return res;
+}
+
+exports.active = async(id, data) => {
+    const res = await Plan.updateOne({ _id: id}, {
+        active: data.active
+    });
 }
 
 exports.delete = async(id) => {

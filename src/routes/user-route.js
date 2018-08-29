@@ -8,7 +8,6 @@ const controller = require('../controllers/user-controller');
 const authService = require('../services/auth-service');
 
 //definindo cada tipo de requisição
-router.get('/fetch-all', controller.get);
 router.get('/confirmed/:id', controller.confirmed);
 router.get('/activate/:id', controller.activate);
 router.post('/create', controller.post);
@@ -20,6 +19,7 @@ router.post('/generate-token', controller.generateToken);
 router.post('/update-password/:token', controller.updatePasswordNonAuth);
 
 //Rotas que precisam de token
+router.get('/fetch-all', authService.isAdmin, controller.get);
 router.get('/get-profile/:id', authService.authorize, controller.getProfile);
 router.get('/get-client/:id', authService.authorize, controller.getClient);
 router.post('/reset-password/:id', authService.authorize, controller.updatePassword);

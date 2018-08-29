@@ -19,6 +19,10 @@ const schema = new Schema({
     qtdeXML: {
         type: Number,
         required: true
+    },
+    active: {
+        type: Boolean,
+        require: true
     }
 });
 

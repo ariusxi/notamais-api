@@ -91,7 +91,7 @@ exports.post = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+user._id)
         );
 
         res.status(201).send({
@@ -141,7 +141,7 @@ exports.postAdmin = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+user._id)
         );
 
         res.status(201).send({
@@ -190,7 +190,7 @@ exports.postCounter = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+user._id)
         );
 
         res.status(201).send({
@@ -215,6 +215,13 @@ exports.authenticate = async(req, res, next) => {
         if(!user){
             res.status(400).send({
                 message: 'Usuário ou Senha inválidos'
+            });
+            return;
+        }
+
+        if(!user.activate){
+            res.status(400).send({
+                message: 'Esse usuário ainda não foi ativado no sistema'
             });
             return;
         }
