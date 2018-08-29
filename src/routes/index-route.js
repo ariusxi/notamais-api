@@ -11,4 +11,8 @@ router.post('/', controller.post);
 
 router.get('/payment', controller.payment);
 
+router.get('/get-payment', controller.getPayment);
+
+router.get('/cancel-payment', controller.cancelPayment);
+
 module.exports = router;
