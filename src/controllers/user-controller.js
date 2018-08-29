@@ -219,7 +219,7 @@ exports.authenticate = async(req, res, next) => {
             return;
         }
 
-        if(!user.activate){
+        if(user.activate == false){
             res.status(400).send({
                 message: 'Esse usuário ainda não foi ativado no sistema'
             });
@@ -323,7 +323,7 @@ exports.generateToken = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Recuperação de Senha',
-            global.EMAIL_TMPL.replace('{0}', 'http://localhost:8080/notamais-web/views/new-password.jsp?token='+token)
+            global.EMAIL_TMPL.replace('{0}', 'http://localhost:8080/notamais-web/views/public/new-password.jsp?token='+token)
         );
 
         res.status(200).send({
