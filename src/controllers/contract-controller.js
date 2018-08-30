@@ -47,6 +47,28 @@ exports.getByUser = async(req, res, next) => {
     }
 }
 
+exports.test = async(req, res, next) => {
+    try{
+        let validade = new Date();
+        let plan = planrepository.getById('5b8580373930c00014d76991');
+        validade.setDate(validade.getDate() + 7);
+
+        repository.post({
+            data: Date.now(),
+            shelf_life: validade,
+            ativo: true,
+            value: plan.value,
+            user: req.body.user,
+            plan: plan._id
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.post = async(req, res, next) => {
     
         let user = await userrepository.getById(req.body.user);
