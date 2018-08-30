@@ -233,6 +233,8 @@ exports.authenticate = async(req, res, next) => {
             roles: user.roles
         });
 
+        const first = await authrepository.getByUser(user._id);
+
         await authrepository.create({
             date: Date.now(),
             ip: req.body.ip,
@@ -240,9 +242,15 @@ exports.authenticate = async(req, res, next) => {
             user: user._id
         });
 
+        let firstlogin = false;
+        if(!first){
+            firstlogin = true;
+        }
+
         res.status(201).send({
             token: token,
             data: {
+                firstlogin: firstlogin,
                 id: user._id,
                 email: user.email,
                 name: user.name,

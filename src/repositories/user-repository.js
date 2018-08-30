@@ -17,8 +17,13 @@ exports.create = async(data) =>  {
 
 exports.authenticate = async(data) => {
     const res = await User.findOne({
-        email: data.email,
-        password: data.password
+        $or :[{
+            email: data.email,
+            password: data.password
+        }, {
+            nickname: data.email,
+            password: data.password
+        }]
     });
     return res;
 }

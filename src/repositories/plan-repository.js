@@ -15,8 +15,13 @@ exports.getAdmin = async() => {
     return res;
 }
 
-exports.getByQtdeXML = async(qtdeXML) => {
-    const res = await Plan.findOne({ qtdeXML: qtdeXML });
+exports.getPlan = async(qtdeXML, name) => {
+    const res = await Plan.findOne({ 
+        $or: [
+            { qtdeXML: qtdeXML},
+            { name: name }
+        ] 
+    });
     return res;
 }
 

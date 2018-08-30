@@ -8,6 +8,13 @@ exports.get = async() => {
     return res;
 }
 
+exports.getByUser = async(user) => {
+    const res = await Auth.find({
+        user: user
+    });
+    return res;
+}
+
 exports.create = async(data) => {
     var auth = new Auth(data);
     return await auth.save();
