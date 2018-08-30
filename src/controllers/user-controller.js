@@ -5,7 +5,7 @@ const repository = require('../repositories/user-repository');
 const clientrepository = require('../repositories/client-repository');
 const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
-const employeerepository = require('../repositories/employee-repository');
+const contractrepository = require('../repositories/contract-repository');
 const authrepository = require('../repositories/auth-repository');
 const md5 = require('md5');
 
@@ -247,9 +247,24 @@ exports.authenticate = async(req, res, next) => {
             firstlogin = true;
         }
 
+        let contract = {
+            active: false,
+            data: {}
+        };
+
+        //Pegando dados de contrato
+        const ctnc = await contractrepository.getByUser(user._id);
+        let date = new Date();
+        
+        if(ctnc.shelf_life > date){
+            contract.active = true;
+            contract.data = ctnc;
+        }
+
         res.status(201).send({
             token: token,
             data: {
+                contract: contract,
                 firstlogin: firstlogin,
                 id: user._id,
                 email: user.email,

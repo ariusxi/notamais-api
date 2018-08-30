@@ -9,7 +9,7 @@ exports.get = async() =>  {
 }
 
 exports.getById = async(id) => {
-    const res = await Contract.find({
+    const res = await Contract.findOne({
         _id: id
     })
     .populate('user')
@@ -18,7 +18,7 @@ exports.getById = async(id) => {
 }
 
 exports.getByUser = async(user) => {
-    const res = await Contract.find({
+    const res = await Contract.findOne({
         user: user
     });
     return res;
