@@ -41,11 +41,11 @@ exports.getById = async(req, res, next) =>  {
 exports.post = async(req, res, next) => {
     try{
 
-        const plan = await repository.getByQtdeXML(req.body.qtdeXML);
+        const plan = await repository.getPlan(req.body.qtdeXML, req.body.name);
 
         if(plan){
             res.status(400).send({
-                message: 'Já existe um plano com essa quantidade de XML'
+                message: 'Já existe um plano cadastro com esses dados'
             });
         }
 

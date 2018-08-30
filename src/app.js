@@ -24,6 +24,7 @@ const Employee = require('./models/employee-model');
 const Auth = require('./models/auth-model');
 const Client = require('./models/client-model');
 const Card = require('./models/card-model');
+const Contract = require('./models/contract-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');
@@ -32,6 +33,7 @@ const planroute = require('./routes/plan-route');
 const addressroute = require('./routes/address-route');
 const employeeroute = require('./routes/employee-route');
 const cardroute = require('./routes/card-route');
+const contractroute = require('./routes/contract-route');
 
 //Limitando tamanho da requisição
 app.use(bodyParser.json({
@@ -57,6 +59,7 @@ app.use('/plans', planroute);
 app.use('/address', addressroute);
 app.use('/employees', employeeroute);
 app.use('/cards', cardroute);
+app.use('/contracts', contractroute);
 
 //Exportando APP
 module.exports = app;
