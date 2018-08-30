@@ -70,7 +70,16 @@ exports.post = async(req, res, next) => {
 
 exports.put = async(req, res, next) => {
     try{
+        const plan = await repository.getPlan(req.body.qtdeXML, req.body.name);
+
+        if(plan && plan._id != req.params.id){
+            res.status(400).send({
+                message: 'Já existe um plano cadastro com esses dados'
+            });
+        }
+
         await repository.update(req.params.id, req.body);
+
         res.status(200).send({
             message: 'Plano alterado com sucesso'
         });
