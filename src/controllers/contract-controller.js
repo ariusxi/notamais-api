@@ -50,8 +50,16 @@ exports.getByUser = async(req, res, next) => {
 exports.test = async(req, res, next) => {
     try{
         let validade = new Date();
-        let plan = planrepository.getById('5b8580373930c00014d76991');
+        let plan = await planrepository.getById('5b8580373930c00014d76991');
         validade.setDate(validade.getDate() + 7);
+
+        const user = userrepository.getById(req.body.user);
+
+        emailService.send(
+            user.email,
+            'Periodo de testes iniciado',
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido<br/>Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema')
+        );
 
         repository.post({
             data: Date.now(),
@@ -60,6 +68,10 @@ exports.test = async(req, res, next) => {
             value: plan.value,
             user: req.body.user,
             plan: plan._id
+        });
+        
+        res.status(200).send({
+            message: 'Periodo de testes iniciado com sucesso'
         });
     }catch(e){
         res.status(500).send({
