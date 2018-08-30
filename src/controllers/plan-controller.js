@@ -41,7 +41,7 @@ exports.getById = async(req, res, next) =>  {
 exports.post = async(req, res, next) => {
     try{
 
-        const plan = repository.getByQtdeXML(req.body.qtdeXML);
+        const plan = await repository.getByQtdeXML(req.body.qtdeXML);
 
         if(plan){
             res.status(400).send({
