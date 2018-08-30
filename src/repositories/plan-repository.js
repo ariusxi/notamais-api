@@ -16,7 +16,7 @@ exports.getAdmin = async() => {
 }
 
 exports.getByQtdeXML = async(qtdeXML) => {
-    const res = await Contract.find({});
+    const res = await Plan.findOne({ qtdeXML: qtdeXML });
     return res;
 }
 
