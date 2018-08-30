@@ -10,6 +10,7 @@ const authService = require('../services/auth-service');
 //definindo cada tipo de requisição
 router.get('/user/:id', authService.authorize, controller.getByUser);
 router.post('/create', authService.authorize, controller.post);
+router.post('/test', authService.authorize,  controller.test);
 router.post('/renew/:id', authService.authorize, controller.renew);
 router.post('/cancel/:id', authService.authorize, controller.cancel);
 
