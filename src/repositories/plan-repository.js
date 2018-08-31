@@ -40,8 +40,7 @@ exports.update = async(id, data) => {
         name: data.name,
         description: data.description,
         value: data.value,
-        qtdeXML: data.qtdeXML,
-        active: req.body.active
+        qtdeXML: data.qtdeXML
     });
     return res;
 }
