@@ -91,11 +91,11 @@ exports.post = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta http://localhost:8080/notamais-web/views/login.jsp?id='+user._id)
         );
 
         res.status(201).send({
-            message: 'Cadastro efetuado com sucesso'
+            message: 'Cadastro efetuado com sucesso, por favor confirme o cadastro pelo email '+req.body.email
         });
     }catch(e){
         res.status(500).send({
@@ -141,7 +141,7 @@ exports.postAdmin = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!')
         );
 
         res.status(201).send({
@@ -190,11 +190,11 @@ exports.postCounter = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta http://localhost:8080/notamais-web/views/login.jsp?id='+user._id)
         );
 
         res.status(201).send({
-            message: 'Cadastro efetuado com sucesso'
+            message: 'Cadastro efetuado com sucesso, por favor confirme o cadastro pelo email '+req.body.email
         });
     }catch(e){
         res.status(500).send({
@@ -251,7 +251,7 @@ exports.authenticate = async(req, res, next) => {
             active: false,
             data: {}
         };
-        
+
         if(user.roles[0] == 'user'){
             //Pegando dados de contrato
             const ctnc = await contractrepository.getByUser(user._id);
@@ -507,6 +507,15 @@ exports.confirmed = async(req, res, next) => {
 
 exports.activate = async(req, res, next) => {
     try{
+
+        const user = repository.getById(req.params);
+
+        if(!user){
+            res.status(401).send({
+                message: 'Usuário não encontrado'
+            });
+            return;
+        }
 
         await repository.activate(req.params.id);
 
