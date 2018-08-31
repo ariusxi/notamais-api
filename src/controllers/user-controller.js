@@ -219,7 +219,7 @@ exports.authenticate = async(req, res, next) => {
             return;
         }
 
-        if(user.activate == false){
+        if(user.active == false){
             res.status(400).send({
                 message: 'Esse usuário ainda não foi ativado no sistema'
             });
