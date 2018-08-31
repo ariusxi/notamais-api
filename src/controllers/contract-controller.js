@@ -89,7 +89,7 @@ exports.post = async(req, res, next) => {
         let type = "creditCard";
         let validade = new Date();
         validade.setMonth(validade.getMonth() + 1);
-        if(cardType == "CreditCard"){
+        if(cardType != "CreditCard"){
             type = "debitCard";
         }
         
