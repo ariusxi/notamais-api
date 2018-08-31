@@ -47,6 +47,7 @@ exports.post = async(req, res, next) => {
             res.status(400).send({
                 message: 'Já existe um plano cadastro com esses dados'
             });
+            return;
         }
 
         await repository.create({
@@ -76,6 +77,7 @@ exports.put = async(req, res, next) => {
             res.status(400).send({
                 message: 'Já existe um plano cadastro com esses dados'
             });
+            return;
         }
 
         await repository.update(req.params.id, req.body);
