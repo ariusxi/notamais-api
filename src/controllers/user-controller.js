@@ -206,7 +206,7 @@ exports.postCounter = async(req, res, next) => {
 
 
 exports.authenticate = async(req, res, next) => {
-    try{
+    
         const user = await repository.authenticate({
             email: req.body.email,
             password: md5(req.body.password + global.SALT_KEY)
@@ -251,14 +251,16 @@ exports.authenticate = async(req, res, next) => {
             active: false,
             data: {}
         };
-
-        //Pegando dados de contrato
-        const ctnc = await contractrepository.getByUser(user._id);
-        let date = new Date();
         
-        if(ctnc.shelf_life > date){
-            contract.active = true;
-            contract.data = ctnc;
+        if(user.roles[0] == 'user'){
+            //Pegando dados de contrato
+            const ctnc = await contractrepository.getByUser(user._id);
+            let date = new Date();
+            
+            if(ctnc.shelf_life > date){
+                contract.active = true;
+                contract.data = ctnc;
+            }
         }
 
         res.status(201).send({
@@ -272,12 +274,7 @@ exports.authenticate = async(req, res, next) => {
                 roles: user.roles
             }
         });
-    }catch(e){
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
-    }
+    
 }
 
 exports.refreshToken = async(req, res, next) => {
