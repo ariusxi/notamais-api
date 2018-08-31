@@ -256,8 +256,7 @@ exports.authenticate = async(req, res, next) => {
             //Pegando dados de contrato
             const ctnc = await contractrepository.getByUser(user._id);
             let date = new Date();
-            
-            if(ctnc.shelf_life > date){
+            if(ctnc && ctnc.shelf_life > date){
                 contract.active = true;
                 contract.data = ctnc;
             }
