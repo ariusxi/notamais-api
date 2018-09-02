@@ -4,7 +4,7 @@ const repository = require('../repositories/card-repository');
 
 exports.get = async(req, res, next) => {
     try{
-        var data = await repository.get();
+        var data = await repository.get(req.body.user);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
