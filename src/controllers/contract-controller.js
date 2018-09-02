@@ -174,7 +174,7 @@ exports.post = async(req, res, next) => {
                         emailService.send(
                             user.email,
                             'Plano contratado com sucesso',
-                            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
+                            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
                         );
                 
                         res.status(201).send({
