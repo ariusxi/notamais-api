@@ -50,8 +50,13 @@ exports.activate = async(id) =>  {
     return res;
 }
 
+exports.block = async(id, block) => {
+    const res = await user.updateOne({ _id: id }, { active: block });
+    return res;
+}
+
 exports.confirmed = async(id) => {
-    const res = await User.updateOne({ _id: id },{ active: true});
+    const res = await User.updateOne({ _id: id },{ active: true });
     return res;
 }
 
