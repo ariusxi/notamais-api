@@ -235,17 +235,17 @@ exports.authenticate = async(req, res, next) => {
 
         const first = await authrepository.getByUser(user._id);
 
+        let firstlogin = false;
+        if(!first){
+            firstlogin = true;
+        }
+
         await authrepository.create({
             date: Date.now(),
             ip: req.body.ip,
             session: token,
             user: user._id
         });
-
-        let firstlogin = false;
-        if(!first){
-            firstlogin = true;
-        }
 
         let contract = {
             active: false,

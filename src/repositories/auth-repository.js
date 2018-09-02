@@ -9,7 +9,7 @@ exports.get = async() => {
 }
 
 exports.getByUser = async(user) => {
-    const res = await Auth.find({
+    const res = await Auth.findOne({
         user: user
     });
     return res;
