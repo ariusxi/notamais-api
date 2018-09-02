@@ -507,7 +507,7 @@ exports.confirmed = async(req, res, next) => {
 exports.activate = async(req, res, next) => {
     try{
 
-        const user = repository.getById(req.params);
+        const user = repository.getById(req.params).id;
 
         if(!user){
             res.status(401).send({
@@ -521,6 +521,33 @@ exports.activate = async(req, res, next) => {
         res.status(201).send({
             message: 'Perfil ativado com sucesso'
         });
+
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.block = async(id) => {
+    try{
+
+        const user  = repository.getById(req.params.id);
+
+        if(!user){
+            res.status(401).send({
+                message: 'Usuário não encontrado'
+            });
+            return;
+        }
+
+        let block = true;
+        if(user.active == true){
+            block = false;
+        }
+
+        await repository.block(req.params.id, block);
 
     }catch(e){
         res.status(500).send({
