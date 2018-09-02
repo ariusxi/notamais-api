@@ -26,23 +26,21 @@ exports.get = async(req, res, next) => {
 
 exports.getProfile = async(req, res, next) => {
     try{
-        var data = await personrepository.get(req.params.id);
-        res.status(200).send(data);
+        let user = await repository.getById(req.params.id);
+        let profile = await personrepository.get(req.params.id);
+        let client = [];
+        if(user.roles[0] == 'user'){
+            client = await clientrepository.get(req.params.id);
+        }
+
+        res.status(200).send({
+            user: user,
+            profile: profile,
+            client: client
+        });
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processsar sua requisição',
-            data: e
-        });
-    }
-}
-
-exports.getClient = async(req, res, next) => {
-    try{
-        var data = await clientrepository.get(req.params.id);
-        res.status(200).send(data);
-    }catch(e){
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição',
             data: e
         });
     }
@@ -549,6 +547,10 @@ exports.block = async(id) => {
 
         await repository.block(req.params.id, block);
 
+
+        res.status(200).send({
+            message: 'Status de perfil alterado com sucesso'
+        });
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',

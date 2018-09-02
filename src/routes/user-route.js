@@ -22,7 +22,7 @@ router.post('/update-password/:token', controller.updatePasswordNonAuth);
 router.get('/fetch-all', authService.isAdmin, controller.get);
 router.get('/block/:id', authService.isAdmin, controller.block);
 router.get('/get-profile/:id', authService.authorize, controller.getProfile);
-router.get('/get-client/:id', authService.authorize, controller.getClient);
+router.get('/get-user/:id', authService.isAdmin, controller.getProfile);
 router.post('/reset-password/:id', authService.authorize, controller.updatePassword);
 router.post('/update-profile/:id', authService.authorize, controller.updateProfile);
 
