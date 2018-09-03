@@ -26,8 +26,7 @@ exports.post = async(req, res, next) => {
             name: req.body.name,
             gender: req.body.gender,
             nickname: req.body.nickname,
-            cpf: req.body.cpf,
-            user: req.params.id
+            cpf: req.body.cpf
         });
 
         const person = await personrepository.getByCpf(req.body.cpf);
