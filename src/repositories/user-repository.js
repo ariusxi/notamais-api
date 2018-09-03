@@ -4,9 +4,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 exports.get = async() => {
-    const res = await User.find({
-        active: true
-    });
+    const res = await User.find({});
     return res;
 }
 
@@ -41,7 +39,9 @@ exports.getByEmail = async(email) => {
 }
 
 exports.resetPassword = async(password, id) => {
-    const res = await User.updateOne({ _id: id },{ password: password });
+    const res = await User.updateOne({ _id: id },{ 
+        password: password
+    });
     return res;
 }
 
@@ -51,7 +51,9 @@ exports.activate = async(id) =>  {
 }
 
 exports.block = async(id, block) => {
-    const res = await user.updateOne({ _id: id }, { active: block });
+    const res = await User.updateOne({ _id: id }, { 
+        active: block 
+    });
     return res;
 }
 
