@@ -528,10 +528,9 @@ exports.activate = async(req, res, next) => {
     }
 }
 
-exports.block = async(id) => {
+exports.block = async(req, res, next) => {
     try{
-
-        const user  = repository.getById(req.params.id);
+        const user = await repository.getById(req.params.id);
 
         if(!user){
             res.status(401).send({
@@ -544,11 +543,9 @@ exports.block = async(id) => {
         if(user.active == true){
             block = false;
         }
-
         await repository.block(req.params.id, block);
-
-
-        res.status(200).send({
+        
+        res.status(201).send({
             message: 'Status de perfil alterado com sucesso'
         });
     }catch(e){
