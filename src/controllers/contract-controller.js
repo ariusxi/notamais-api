@@ -50,7 +50,7 @@ exports.getByUser = async(req, res, next) => {
 exports.test = async(req, res, next) => {
     try{
         let validade = new Date();
-        let plan = await planrepository.getById('5b8580373930c00014d76991');
+        let plan = await planrepository.getFirst();
         validade.setDate(validade.getDate() + 7);
 
         const user = userrepository.getById(req.body.user);

@@ -10,6 +10,11 @@ exports.get = async() =>  {
     return res;
 }
 
+exports.getFirst = async() => {
+    const res = await Plan.findOne({});
+    return res;
+}
+
 exports.getAdmin = async() => {
     const res = await Plan.find({});
     return res;
