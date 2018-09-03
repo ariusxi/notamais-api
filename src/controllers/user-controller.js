@@ -505,7 +505,7 @@ exports.confirmed = async(req, res, next) => {
 exports.activate = async(req, res, next) => {
     try{
 
-        const user = repository.getById(req.params).id;
+        const user = repository.getById(req.params.id);
 
         if(!user){
             res.status(401).send({
