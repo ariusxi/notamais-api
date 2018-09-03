@@ -11,5 +11,10 @@ module.exports = {
         'RequestId': '', // Opcional - Identificação do Servidor na Cielo
         'sandbox': true, // Opcional - Ambiente de Testes
         'debug': true // Opcional - Exibe os dados enviados na requisição para a Cielo
+    },
+    paramsTwilio: {
+        'accountSid': 'AC90d7d99c80eed05a769e762d8b379570',
+        'apiKey': 'SK37cf6a0ef09d092a70f777667a4ecffc',
+        'apiSecret': '3oIxqdUXuoSnrXjtKz64I5fya8OB3Iil'
     }
 }
