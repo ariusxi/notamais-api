@@ -82,7 +82,7 @@ exports.test = async(req, res, next) => {
 }
 
 exports.post = async(req, res, next) => {
-    
+    try{
         let user = await userrepository.getById(req.body.user);
         let plan = await planrepository.getById(req.body.plan);
         let cardType = req.body.cardType;
@@ -183,6 +183,12 @@ exports.post = async(req, res, next) => {
                         break;
                 }
             });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
     
 }
 
