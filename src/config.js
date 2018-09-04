@@ -5,7 +5,7 @@ module.exports = {
     //Development
     //url: 'http://localhost:8080/notamais-web/',
     //Production
-    url: 'https://notamaisapi.herokuapp.com/',
+    url: 'https://notamais.herokuapp.com/',
     connectionString: 'mongodb://admin:master123@ds018268.mlab.com:18268/notamais',
     sendgridkey: 'SG.gg0ckczPT5GUvrfyS0b4Vg.RY5V3Tc58P0VRbeccbYaw8C0138xN94qtsunmwUTRcU',
     containerConnectionString: 'TBD',
