@@ -8,6 +8,7 @@ const personrepository = require('../repositories/person-repository');
 const contractrepository = require('../repositories/contract-repository');
 const authrepository = require('../repositories/auth-repository');
 const md5 = require('md5');
+const config = require('../config');
 
 const emailService = require('../services/email-service');
 const authService = require('../services/auth-service');
@@ -89,7 +90,7 @@ exports.post = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta http://localhost:8080/notamais-web/acess-user.jsp?id='+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+config.url+'acess-user.jsp?id='+user._id)
         );
 
         res.status(201).send({
@@ -188,7 +189,7 @@ exports.postCounter = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta http://localhost:8080/notamais-web/acess-user.jsp?id='+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+config.url+'acess-user.jsp?id='+user._id)
         );
 
         res.status(201).send({
@@ -346,7 +347,7 @@ exports.generateToken = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Recuperação de Senha',
-            global.EMAIL_TMPL.replace('{0}', 'http://localhost:8080/notamais-web/views/public/new-password.jsp?token='+token)
+            global.EMAIL_TMPL.replace('{0}', ''+config.url+'/views/public/new-password.jsp?token='+token)
         );
 
         res.status(200).send({
