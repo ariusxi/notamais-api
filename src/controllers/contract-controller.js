@@ -103,6 +103,7 @@ exports.post = async(req, res, next) => {
             user: req.body.user
         });
 
+        /*
         let dadosSale = {
             "MerchantOrderId":"2014111706",
             "Customer": {
@@ -162,6 +163,7 @@ exports.post = async(req, res, next) => {
                         });
                         break;
                     default:
+                    */
                         repository.post({
                             data: Date.now(),
                             shelf_life: validade,
@@ -174,15 +176,17 @@ exports.post = async(req, res, next) => {
                         emailService.send(
                             user.email,
                             'Plano contratado com sucesso',
-                            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
+                            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+user._id)
                         );
                 
                         res.status(201).send({
                             message: 'Plano contratado com sucesso'
                         });
+                        /*
                         break;
                 }
             });
+            */
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',
