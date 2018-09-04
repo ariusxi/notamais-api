@@ -204,7 +204,7 @@ exports.postCounter = async(req, res, next) => {
 
 
 exports.authenticate = async(req, res, next) => {
-    
+    try{
         const user = await repository.authenticate({
             email: req.body.email,
             password: md5(req.body.password + global.SALT_KEY)
@@ -271,6 +271,12 @@ exports.authenticate = async(req, res, next) => {
                 roles: user.roles
             }
         });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
     
 }
 
