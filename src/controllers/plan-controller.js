@@ -59,7 +59,7 @@ exports.post = async(req, res, next) => {
         });
 
         res.status(201).send({
-            message: 'Plano cadastrado com sucesso'
+            message: 'Cadastro no plano '+req.body.name+' efetuado com sucesso'
         });
     }catch(e){
         res.status(500).send({
