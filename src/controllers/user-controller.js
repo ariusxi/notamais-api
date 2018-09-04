@@ -90,7 +90,7 @@ exports.post = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+config.url+'acess-user.jsp?id='+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta https://notamais.herokuapp.com/acess-user.jsp?id='+user._id)
         );
 
         res.status(201).send({
@@ -189,7 +189,7 @@ exports.postCounter = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Bem vindo ao Nota Mais',
-            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta '+config.url+'acess-user.jsp?id='+user._id)
+            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta https://notamais.herokuapp.com/acess-user.jsp?id='+user._id)
         );
 
         res.status(201).send({
@@ -347,7 +347,7 @@ exports.generateToken = async(req, res, next) => {
         emailService.send(
             req.body.email,
             'Recuperação de Senha',
-            global.EMAIL_TMPL.replace('{0}', ''+config.url+'/views/public/new-password.jsp?token='+token)
+            global.EMAIL_TMPL.replace('{0}', 'https://notamais.herokuapp.com/views/public/new-password.jsp?token='+token)
         );
 
         res.status(200).send({
