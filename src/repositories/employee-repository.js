@@ -17,5 +17,5 @@ exports.post = async(data) => {
 }
 
 exports.delete = async(id) => {
-    await Employee.findOneAndRemove(id);
+    await Employee.findByIdAndRemove(id);
 }

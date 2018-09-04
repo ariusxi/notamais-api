@@ -23,5 +23,5 @@ exports.post = async(data) => {
 }
 
 exports.delete = async(id) => {
-    await Card.findOneAndRemove(id);
+    await Card.findByIdAndRemove(id);
 }
