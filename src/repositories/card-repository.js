@@ -17,6 +17,20 @@ exports.getById = async(id) => {
     return res;
 }
 
+exports.disableAll = async(id) => {
+    const res = await Card.updateMany({ user: id },{
+        selected: false
+    });
+    return res;
+}
+
+exports.selected = async(id) => {
+    const res = await Card.updateOne({ _id: id}, {
+        selected: true
+    });
+    return res;
+}
+
 exports.post = async(data) => {
     var card = new Card(data);
     return await card.save();

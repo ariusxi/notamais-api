@@ -24,6 +24,10 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    selected: {
+        type: Boolean,
+        required: true
+    },
     type: {
         type: String,
         required: true,

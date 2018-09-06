@@ -16,6 +16,10 @@ const schema = new Schema({
         type: Number,
         required: true,
     },
+    promotion: {
+        type: Number,
+        required: false
+    },
     qtdeXML: {
         type: Number,
         required: true

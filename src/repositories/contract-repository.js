@@ -20,7 +20,9 @@ exports.getById = async(id) => {
 exports.getByUser = async(user) => {
     const res = await Contract.findOne({
         user: user
-    });
+    })
+    .populate('user')
+    .populate('plan');
     return res;
 }
 
