@@ -3,6 +3,7 @@
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/employee-repository');
 const personrepository = require('../repositories/person-repository');
+const userrepository = require('../repositories/user-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -22,11 +23,25 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
+        //Inserindo usuário no banco
+        await userrepository.create({
+            name: req.body.name,
+            email: req.body.email,
+            password:  md5(req.body.password + global.SALT_KEY),
+            active: false,
+            confirmed: false,
+            createdAt: Date.now(),
+            roles: ["employee"]
+        });
+
+        const user = await repository.getByEmail(req.body.email);
+
         await personrepository.create({
             name: req.body.name,
             gender: req.body.gender,
             nickname: req.body.nickname,
-            cpf: req.body.cpf
+            cpf: req.body.cpf,
+            user: user._id
         });
 
         const person = await personrepository.getByCpf(req.body.cpf);

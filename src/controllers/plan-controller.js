@@ -54,6 +54,7 @@ exports.post = async(req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             value: req.body.value,
+            promotion: req.body.promotion,
             qtdeXML: req.body.qtdeXML,
             active: true
         });

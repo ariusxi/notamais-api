@@ -50,6 +50,24 @@ exports.post = async(req, res, next) => {
     }
 }
 
+exports.selected = async(req, res, next) => {
+    try{
+        //Desabilitando todos os cartões
+        await repository.disableAll(req.params.user);
+
+        await repository.selected(req.params.id);
+
+        res.status(201).send({
+            message: 'Cartão definido como principal com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.put = async(req, res, next) => {
     try{
         await repository.put({
