@@ -3,6 +3,7 @@
 //Chamando repository
 const repository = require('../repositories/file-repository');
 const contractrepository = require('../repositories/contract-repository');
+const userrepository = require('../repositories/user-repository');
 const path = require('path');
 const fs = require('fs');
 
@@ -36,6 +37,7 @@ exports.post = async(req, res, next) => {
 
         let contract = await contractrepository.getByUser(req.params.id);
         let files = repository.getByUser(req.params.id);
+        let user = userrepository.getById(req.params.id);
 
         if(!req.files){
             res.status(422).send({
@@ -68,7 +70,7 @@ exports.post = async(req, res, next) => {
             let request = require('request');
 
             let formData = {
-                folder: 'imgs',
+                folder: 'xml',
                 file: fs.createReadStream(name)
             };
 
@@ -98,9 +100,17 @@ exports.post = async(req, res, next) => {
             }, (err, httpResponse, body) => {
                 let response = JSON.parse(body);
 
+                await repository.post({
+                    date: Date.now(),
+                    xml: "https://cdn-notamais.herokuapp.com/" + response.url,
+                    user: user._id
+                });
+
                 res.status(200).send({
+                    message: 'Arquivo enviado com sucesso',
                     path: "https://cdn-notamais.herokuapp.com/" + response.url
                 });
+
             });
 
         });
