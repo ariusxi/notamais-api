@@ -192,6 +192,122 @@ exports.post = async(req, res, next) => {
     
 }
 
+exports.change = async(req, res, next) =>  {
+    try{
+        let user = userrepository.getById(req.body.user);
+        let plan = userrepository.getById(req.body.plan);
+        let card = {};
+        let cardType = req.body.cardType;
+        let type = "creditCard";
+        let validade = new Date();
+        validade.setMonth(validade.getMonth() + 1);
+        if(cardType != "CreditCard"){
+            type = "debitCard";
+        }
+        if(req.body.card){
+            card = cardrepository.getById(req.body.card);
+        }else{
+            card = {
+                CardNumber: req.body.CardNumber,
+                Holder: req.body.Holder,
+                ExpirationDate: req.body.ExpirationDate,
+                SecurityCode: req.body.SecurityCode,
+                Brand: req.body.Brand,
+                type: cardType,
+                user: req.body.user
+            }
+            await cardrepository.post(card);
+        }
+
+        let dadosSale = {
+            "MerchantOrderId":"2014111706",
+            "Customer": {
+                "Name": user.name
+            },
+            "Payment": {
+                "Type": cardType,
+                "Amount": plan.value,
+                "Installments": 1,
+                "SoftDescription": "123456789ABCD",
+                "CreditCard": {
+                    "CardNumber": card.CardNumber,
+                    "Holder": card.Holder,
+                    "ExpirationDate": card.ExpirationDate,
+                    "SecurityCode": card.SecurityCode,
+                    "Brand" : card.Brand
+                }
+            }
+        };
+
+        cielo.creditCard.simpleTransaction(dadosSale)
+            .then((data) => {
+                switch(data.Payment.ReturnCode){
+                    case "05":
+                        res.status(400).send({
+                            message: "Não Autorizada"
+                        });
+                        break;
+                    case "57":
+                        res.status(400).send({
+                            message: "Cartão Expirado"
+                        });
+                        break;
+                    case "78":
+                        res.status(400).send({
+                            message: "Cartão Bloqueado"
+                        });
+                        break;
+                    case "99":
+                        res.status(400).send({
+                            message: "Time Out"
+                        });
+                        break;
+                    case "77":
+                        res.status(400).send({
+                            message: "Cartão Cancelado"
+                        });
+                        break;
+                    case "70":
+                        res.status(400).send({
+                            message: "Problemas com o Cartão de Crédito"
+                        });
+                        break;
+                    case "99":
+                        res.status(400).send({
+                            message: "Operation Successful / Time Out"
+                        });
+                        break;
+                    default:
+                        repository.change({
+                            data: Date.now(),
+                            shelf_life: validade,
+                            ativo: true,
+                            value: plan.value,
+                            user: req.body.user,
+                            plan: req.body.plan
+                        });
+
+                        emailService.send(
+                            user.email,
+                            'Plano contratado com sucesso',
+                            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
+                        );
+                
+                        res.status(201).send({
+                            message: 'Plano contratado com sucesso'
+                        });
+                        break;
+                }
+            });
+
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.renew = async(req, res, next) => {
     try{
         let validade = Date.now();

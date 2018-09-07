@@ -4,6 +4,7 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/employee-repository');
 const personrepository = require('../repositories/person-repository');
 const userrepository = require('../repositories/user-repository');
+const recoverrepository = require('../repositories/recover-repository');
 const md5 = require('md5');
 
 const emailService = require('../services/email-service');
@@ -23,11 +24,29 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
+
+        const emailUser = await userrepository.getByEmail(req.body.email);
+        const cpfUser = await personrepository.getByCpf(req.body.cpf);
+
+        if(emailUser){
+            res.status(400).send({
+                message: 'Já existe uma conta cadastrada com esse email'
+            });
+            return;
+        }
+
+        if(cpfUser){
+            res.status(400).send({
+                message: 'Já existe uma conta cadastrada com esse cpf'
+            });
+            return;
+        }
+
         //Inserindo usuário no banco
         await userrepository.create({
             name: req.body.name,
             email: req.body.email,
-            password:  md5(req.body.password + global.SALT_KEY),
+            password:  md5('123456' + global.SALT_KEY),
             active: false,
             confirmed: false,
             createdAt: Date.now(),
@@ -51,6 +70,21 @@ exports.post = async(req, res, next) => {
             person: person._id,
             user: req.params.id
         }); 
+
+        let token = md5(Date.now() + global.SALT_KEY);
+
+        const user = await userrepository.getByEmail(req.body.email);
+
+        await recoverrepository.create({
+            user: user._id,
+            token: token
+        });
+
+        emailService.send(
+            req.body.email,
+            'Novo funcionário',
+            global.EMAIL_TMPL.replace('{0}', 'https://notamais.herokuapp.com/views/public/new-password.jsp?token='+token)
+        );
 
         res.status(201).send({
             message: 'Funcionario cadastrado com sucesso'

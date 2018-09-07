@@ -28,6 +28,16 @@ exports.getById = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
+
+        const card = await repository.getByNumber(req.body.CardNumber);
+
+        if(card){
+            res.status(400).send({
+                message: 'Já existe um cartão cadastrado com esses dados'
+            });
+            return;
+        }
+
         //Inserindo cartão no banco
         await repository.post({
             CardNumber: req.body.CardNumber,

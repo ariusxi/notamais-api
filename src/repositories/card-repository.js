@@ -17,6 +17,13 @@ exports.getById = async(id) => {
     return res;
 }
 
+exports.getByNumber = async(number) => {
+    const res = await Card.find({
+        CardNumber: number
+    });
+    return res;
+}
+
 exports.disableAll = async(id) => {
     const res = await Card.updateMany({ user: id },{
         selected: false

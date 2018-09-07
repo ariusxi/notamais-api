@@ -13,6 +13,7 @@ router.post('/create', authService.authorize, controller.post);
 router.post('/test', authService.authorize,  controller.test);
 router.post('/renew/:id', authService.authorize, controller.renew);
 router.post('/cancel/:id', authService.authorize, controller.cancel);
+router.post('/change/', authService.authorize, controller.change);
 
 //Rotas que precisal de nivel de acesso
 router.get('/', authService.isAdmin, controller.get);

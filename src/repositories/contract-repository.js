@@ -39,6 +39,18 @@ exports.renew = async(data, id) => {
     return res;
 }
 
+exports.change = async(data, id) => {
+    const res = await Contract.updateOne({ user: id }, {
+        data: data.data,
+        validade: data.validade,
+        ativo: data.ativo,
+        value: data.value,
+        plan: data.plan,
+        value: data.value
+    });
+    return res;
+}
+
 exports.delete = async(user) => {
     await Contract.findOneAndRemove(user);
 }
