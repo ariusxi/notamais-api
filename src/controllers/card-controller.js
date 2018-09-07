@@ -46,7 +46,8 @@ exports.post = async(req, res, next) => {
             SecurityCode: req.body.SecurityCode,
             Brand: req.body.Brand,
             type: req.body.type,
-            user: req.params.id
+            user: req.params.id,
+            selected: false
         });
 
         res.status(201).send({
