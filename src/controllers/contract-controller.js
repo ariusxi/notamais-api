@@ -100,7 +100,8 @@ exports.post = async(req, res, next) => {
             SecurityCode: req.body.SecurityCode,
             Brand: req.body.Brand,
             type: cardType,
-            user: req.body.user
+            user: req.body.user,
+            selected: false
         });
 
         let dadosSale = {
@@ -214,7 +215,8 @@ exports.change = async(req, res, next) =>  {
                 SecurityCode: req.body.SecurityCode,
                 Brand: req.body.Brand,
                 type: cardType,
-                user: req.body.user
+                user: req.body.user,
+                selected: false
             }
             await cardrepository.post(card);
         }
