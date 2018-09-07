@@ -73,8 +73,6 @@ exports.post = async(req, res, next) => {
 
         let token = md5(Date.now() + global.SALT_KEY);
 
-        const user = await userrepository.getByEmail(req.body.email);
-
         await recoverrepository.create({
             user: user._id,
             token: token

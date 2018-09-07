@@ -15,7 +15,7 @@ exports.getById = async(id) => {
     return res;
 }
 
-exports.post = async(data) => {
+exports.create = async(data) => {
     var file = new File(data);
     await file.save();
 }
