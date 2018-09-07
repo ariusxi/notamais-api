@@ -4,14 +4,14 @@ const mongoose = require('mongoose');
 const Address = mongoose.model('Address');
 
 exports.get = async(id) =>  {
-    const res = await Address.findOne({
+    const res = await Address.find({
         user: id
     });
     return res;
 }
 
 exports.getById = async(id) => {
-    const res  = await Address.findById(req.params.id);
+    const res  = await Address.findById(id);
     return res;
 }
 
@@ -35,5 +35,5 @@ exports.update = async(id, data) => {
 }
 
 exports.delete = async(id) => {
-    await Address.findOneAndRemove(id);
+    await Address.findByIdAndRemove(id);
 }
