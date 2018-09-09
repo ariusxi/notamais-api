@@ -46,7 +46,7 @@ exports.post = async(req, res, next) => {
             name: req.body.name,
             email: req.body.email,
             password:  md5('123456' + global.SALT_KEY),
-            active: false,
+            active: true,
             confirmed: false,
             createdAt: Date.now(),
             roles: ["employee"]
