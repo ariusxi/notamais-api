@@ -58,5 +58,7 @@ exports.active = async(id, data) => {
 }
 
 exports.delete = async(id) => {
-    await Plan.findByIdAndRemove(id);
+    await Plan.findByIdAndRemove(id, (err) => {
+        console.log(err);
+    });
 }

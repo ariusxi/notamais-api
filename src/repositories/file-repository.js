@@ -21,5 +21,7 @@ exports.post = async(data) => {
 }
 
 exports.delete = async(id) => {
-    await File.findByIdAndRemove(id);
+    await File.findByIdAndRemove(id, (err) => {
+        console.log(err);
+    });
 }

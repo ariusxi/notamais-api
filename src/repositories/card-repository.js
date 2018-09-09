@@ -44,5 +44,7 @@ exports.post = async(data) => {
 }
 
 exports.delete = async(id) => {
-    await Card.findByIdAndRemove(id);
+    await Card.findByIdAndRemove(id, (err) => {
+        console.log(err);
+    });
 }
