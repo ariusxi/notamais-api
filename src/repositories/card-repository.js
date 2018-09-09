@@ -11,7 +11,7 @@ exports.get = async(id) => {
 }
 
 exports.getById = async(id) => {
-    const res = await Card.find({
+    const res = await Card.findOne({
         _id: id
     });
     return res;

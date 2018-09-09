@@ -195,8 +195,8 @@ exports.post = async(req, res, next) => {
 
 exports.change = async(req, res, next) =>  {
     try{
-        let user = userrepository.getById(req.body.user);
-        let plan = userrepository.getById(req.body.plan);
+        let user = await userrepository.getById(req.body.user);
+        let plan = await planrepository.getById(req.body.plan);
         let card = {};
         let cardType = req.body.cardType;
         let type = "creditCard";
@@ -206,7 +206,7 @@ exports.change = async(req, res, next) =>  {
             type = "debitCard";
         }
         if(req.body.card){
-            card = cardrepository.getById(req.body.card);
+            card = await cardrepository.getById(req.body.card);
         }else{
             card = {
                 CardNumber: req.body.CardNumber,
@@ -227,7 +227,7 @@ exports.change = async(req, res, next) =>  {
                 "Name": user.name
             },
             "Payment": {
-                "Type": cardType,
+                "Type": card.type,
                 "Amount": plan.value,
                 "Installments": 1,
                 "SoftDescription": "123456789ABCD",
@@ -308,6 +308,7 @@ exports.change = async(req, res, next) =>  {
             data: e
         });
     }
+   
 }
 
 exports.renew = async(req, res, next) => {
