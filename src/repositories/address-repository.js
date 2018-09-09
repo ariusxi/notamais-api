@@ -35,5 +35,7 @@ exports.update = async(id, data) => {
 }
 
 exports.delete = async(id) => {
-    await Address.findByIdAndRemove(id);
+    await Address.findByIdAndRemove(id, (err) => {
+        console.log(err);
+    });
 }

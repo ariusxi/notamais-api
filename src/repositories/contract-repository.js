@@ -52,5 +52,7 @@ exports.change = async(data, id) => {
 }
 
 exports.delete = async(user) => {
-    await Contract.findOneAndRemove(user);
+    await Contract.findByIdAndRemove(user, (err) => {
+        console.log(err);
+    });
 }
