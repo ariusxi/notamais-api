@@ -53,7 +53,7 @@ exports.post = async(req, res, next) => {
             roles: ["employee"]
         });
 
-        const user = await repository.getByEmail(req.body.email);
+        const user = await userrepository.getByEmail(req.body.email);
 
         await personrepository.create({
             name: req.body.name,
