@@ -84,7 +84,7 @@ exports.post = async(req, res, next) => {
         );
 
         res.status(201).send({
-            message: 'Funcionario cadastrado com sucesso'
+            message: 'Funcionario cadastrado com sucesso, foi enviado um email para '+req.body.email+' para definir uma senha de acesso'
         });
     }catch(e){
         res.status(500).send({
