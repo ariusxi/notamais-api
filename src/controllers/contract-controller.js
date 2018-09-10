@@ -282,12 +282,11 @@ exports.change = async(req, res, next) =>  {
                     default:
                         repository.change({
                             data: Date.now(),
-                            shelf_life: validade,
+                            validade: validade,
                             ativo: true,
                             value: plan.value,
-                            user: req.body.user,
                             plan: req.body.plan
-                        });
+                        }, req.body.user);
 
                         emailService.send(
                             user.email,

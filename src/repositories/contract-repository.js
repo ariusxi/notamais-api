@@ -44,7 +44,6 @@ exports.change = async(data, id) => {
         data: data.data,
         validade: data.validade,
         ativo: data.ativo,
-        value: data.value,
         plan: data.plan,
         value: data.value
     });
