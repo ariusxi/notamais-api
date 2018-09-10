@@ -15,6 +15,13 @@ exports.getById = async(id) => {
     return res;
 }
 
+exports.getByUser = async(id) => {
+    const res = await File.find({
+        user: id
+    });
+    return res;
+}
+
 exports.post = async(data) => {
     var file = new File(data);
     await file.save();
