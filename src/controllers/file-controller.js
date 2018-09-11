@@ -46,6 +46,7 @@ exports.post = async(req, res, next) => {
             return;
         }
 
+        //Verificando quantidade de XML
         if(files.length >= contract.plan.qtdeXML){
             res.status(400).send({
                 message: 'Você atingiu o máximo de envio de XML do seu plano'
