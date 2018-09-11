@@ -107,7 +107,10 @@ exports.post = async(req, res, next) => {
                     user: user._id
                 });
 
-                file.unlinkSync(name);
+                fs.unlink(name, (err) => {
+                    if (err) throw err;
+                    console.log(name+' was deleted');
+                });
 
                 res.status(200).send({
                     message: 'Arquivo enviado com sucesso',
