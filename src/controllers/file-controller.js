@@ -59,7 +59,13 @@ exports.post = async(req, res, next) => {
         let file = req.files.file;
         name = folder + "/../../cache/" + name;
 
-        file.mv(name, async(error) => {
+        res.status(400).send({
+            message: 'Teste',
+            file: req.files
+        });
+        return false;
+
+        file.mv(name, (error) => {
 
             if(error){
                 res.status(400).send({
