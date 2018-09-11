@@ -1,0 +1,1 @@
+Essa pasta é  apenas para uploads de arquivos temporários na API
