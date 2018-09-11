@@ -59,10 +59,10 @@ exports.post = async(req, res, next) => {
         let file = req.files.file;
         name = folder + "/../../cache/" + name;
 
-        fs.mv(name, (error) => {
+        file.mv(name, (error) => {
 
             if(error){
-                res.status(400).send({
+                res.status(500).send({
                     message: 'Falha ao processar sua requisição',
                     data: error
                 });
