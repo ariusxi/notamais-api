@@ -65,7 +65,7 @@ exports.post = async(req, res, next) => {
         });
         return false;
 
-        file.mv(name, (error) => {
+        fs.mv(name, (error) => {
 
             if(error){
                 res.status(400).send({
