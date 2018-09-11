@@ -64,7 +64,7 @@ exports.post = async(req, res, next) => {
             if(error){
                 res.status(400).send({
                     message: 'Falha ao processar sua requisição',
-                    data: err
+                    data: error
                 });
             }
 
