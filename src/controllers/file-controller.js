@@ -59,7 +59,7 @@ exports.post = async(req, res, next) => {
         let file = req.files.file;
         name = folder + "/../../cache/" + name;
 
-        file.mv(name, (error) => {
+        file.mv(name, async(error) => {
 
             if(error){
                 res.status(400).send({
@@ -112,7 +112,7 @@ exports.post = async(req, res, next) => {
                     console.log(name+' was deleted');
                 });
 
-                res.status(200).send({
+                res.status(201).send({
                     message: 'Arquivo enviado com sucesso',
                     path: "https://cdn-notamais.herokuapp.com" + response.url
                 });
