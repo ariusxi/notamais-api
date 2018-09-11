@@ -107,6 +107,8 @@ exports.post = async(req, res, next) => {
                     user: user._id
                 });
 
+                file.unlinkSync(name);
+
                 res.status(200).send({
                     message: 'Arquivo enviado com sucesso',
                     path: "https://cdn-notamais.herokuapp.com" + response.url
