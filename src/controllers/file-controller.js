@@ -5,6 +5,7 @@ const repository = require('../repositories/file-repository');
 const contractrepository = require('../repositories/contract-repository');
 const userrepository = require('../repositories/user-repository');
 const path = require('path');
+const md5 = require('md5');
 const fs = require('fs');
 
 exports.get = async(req, res, next) => {
@@ -56,8 +57,9 @@ exports.post = async(req, res, next) => {
 
         let name = req.files.file.name;
 
+        let ext = req.files.file.name.split(".")[1];
         let file = req.files.file;
-        name = folder + "/../../cache/" + name;
+        name = folder + "/../../cache/" + md5(Date.now()) + "." + ext;
 
         file.mv(name, (error) => {
 
