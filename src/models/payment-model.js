@@ -4,20 +4,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    description: {
+    payment: {
         type: String,
         required: true
     },
     date: {
         type: Date,
-        required: true
-    },
-    xml: {
-        type: String,
         required: true
     },
     user: {
@@ -27,4 +19,4 @@ const schema = new Schema({
     }
 });
 
-module.exports = mongoose.model('File', schema);
+module.exports = mongoose.model('Payment', schema);

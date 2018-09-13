@@ -6,6 +6,7 @@ const repository = require('../repositories/contract-repository');
 const userrepository = require('../repositories/user-repository');
 const cardrepository = require('../repositories/card-repository');
 const planrepository = require('../repositories/plan-repository');
+const paymentrepository = require('../repositories/payment-repository');
 
 //Chamando services
 const emailService = require('../services/email-service');
@@ -104,6 +105,11 @@ exports.post = async(req, res, next) => {
             selected: false
         });
 
+        let preco = plan.value;
+        if(plan.promotion){
+            preco = plan.promotion;
+        }
+
         let dadosSale = {
             "MerchantOrderId":"2014111706",
             "Customer": {
@@ -111,7 +117,7 @@ exports.post = async(req, res, next) => {
             },
             "Payment": {
                 "Type": cardType,
-                "Amount": plan.value,
+                "Amount": preco,
                 "Installments": 1,
                 "SoftDescription": "123456789ABCD",
                 "CreditCard": {
@@ -163,13 +169,19 @@ exports.post = async(req, res, next) => {
                         });
                         break;
                     default:
-                        repository.post({
+                        await repository.post({
                             data: Date.now(),
                             shelf_life: validade,
                             ativo: true,
-                            value: plan.value,
+                            value: preco,
                             user: req.body.user,
                             plan: req.body.plan
+                        });
+
+                        await paymentrepository.post({
+                            payment: data.Payment.PaymentId,
+                            date: Date.now(),
+                            user: user._id
                         });
 
                         emailService.send(
@@ -221,6 +233,11 @@ exports.change = async(req, res, next) =>  {
             await cardrepository.post(card);
         }
 
+        let preco = plan.value;
+        if(plan.promotion){
+            preco = plan.promotion;
+        }
+
         let dadosSale = {
             "MerchantOrderId":"2014111706",
             "Customer": {
@@ -228,7 +245,7 @@ exports.change = async(req, res, next) =>  {
             },
             "Payment": {
                 "Type": card.type,
-                "Amount": plan.value,
+                "Amount": preco,
                 "Installments": 1,
                 "SoftDescription": "123456789ABCD",
                 "CreditCard": {
@@ -280,13 +297,19 @@ exports.change = async(req, res, next) =>  {
                         });
                         break;
                     default:
-                        repository.change({
+                        await repository.change({
                             data: Date.now(),
                             validade: validade,
                             ativo: true,
-                            value: plan.value,
+                            value: preco,
                             plan: req.body.plan
                         }, req.body.user);
+
+                        await paymentrepository.post({
+                            payment: data.Payment.PaymentId,
+                            date: Date.now(),
+                            user: user._id
+                        });
 
                         emailService.send(
                             user.email,
