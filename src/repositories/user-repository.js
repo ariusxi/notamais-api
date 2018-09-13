@@ -13,6 +13,18 @@ exports.create = async(data) =>  {
     return await user.save();
 }
 
+exports.getById = async(id) => {
+    const res = await User.findById(id);
+    return res;
+}
+
+exports.getByEmail = async(email) => {
+    const res = await User.findOne({
+        email: email
+    });
+    return res;
+}
+
 exports.authenticate = async(data) => {
     const res = await User.findOne({
         $or :[{
@@ -22,18 +34,6 @@ exports.authenticate = async(data) => {
             nickname: data.email,
             password: data.password
         }]
-    });
-    return res;
-}
-
-exports.getById = async(id) => {
-    const res = await User.findById(id);
-    return res;
-}
-
-exports.getByEmail = async(email) => {
-    const res = await User.findOne({
-        email: email
     });
     return res;
 }

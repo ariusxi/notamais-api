@@ -6,7 +6,7 @@ const fs = require('fs');
 
 exports.get = async(req, res, next) => {
     try{
-        var data = await repository.get(req.params.id);
+        let data = await repository.get(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -18,7 +18,7 @@ exports.get = async(req, res, next) => {
 
 exports.getById = async(req, res, next) =>  {
     try{
-        var data = await repository.get(req.params.id);
+        let data = await repository.get(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({

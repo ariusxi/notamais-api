@@ -4,13 +4,23 @@
 const repository = require('../repositories/file-repository');
 const contractrepository = require('../repositories/contract-repository');
 const userrepository = require('../repositories/user-repository');
+const personrepository = require('../repositories/person-repository');
 const path = require('path');
 const md5 = require('md5');
 const fs = require('fs');
 
 exports.get = async(req, res, next) => {
     try{
-        var data = await repository.get(req.params.id);
+        let user = await userrepository.getById(req.params.id);
+        let person = await personrepository.getByUser(req.params.id);
+        let company = req.params.id;
+
+        if(user.roles[0] == 'employee'){
+            var companyprofile = await employeerepository.getByPerson(person._id);
+            company = await userrepository.getById(companyprofile.user)._id;
+        }
+
+        var data = await repository.get(company);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -39,12 +49,19 @@ exports.post = async(req, res, next) => {
         let contract = await contractrepository.getByUser(req.params.id);
         let files = await repository.getByUser(req.params.id);
         let user = await userrepository.getById(req.params.id);
+        let person = await personrepository.getByUser(req.params.id);
+        let company = req.params.id;
 
         if(!req.files){
             res.status(422).send({
                 message: 'É necessário enviar um arquivo'
             });
             return;
+        }
+
+        if(user.roles[0] == 'employee'){
+            var companyprofile = await employeerepository.getByPerson(person._id);
+            company = await userrepository.getById(companyprofile.user)._id;
         }
 
         //Verificando quantidade de XML
@@ -104,9 +121,11 @@ exports.post = async(req, res, next) => {
                 let response = JSON.parse(body);
 
                 await repository.post({
+                    name: req.body.name,
+                    description: req.body.description,
                     date: Date.now(),
                     xml: "https://cdn-notamais.herokuapp.com" + response.url,
-                    user: user._id
+                    user: company
                 });
 
                 fs.unlink(name, (err) => {

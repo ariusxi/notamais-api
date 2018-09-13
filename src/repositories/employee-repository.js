@@ -11,6 +11,13 @@ exports.get = async(id) => {
     return res;
 }
 
+exports.getByPerson = async(person) => {
+    const res = await Employee.find({
+        person: person
+    });
+    return res;
+}
+
 exports.post = async(data) => {
     var employee = new Employee(data);
     return await employee.save();
