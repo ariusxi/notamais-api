@@ -131,7 +131,7 @@ exports.post = async(req, res, next) => {
         };
         
         cielo.creditCard.simpleTransaction(dadosSale)
-            .then((data) => {
+            .then(async(data) => {
                 switch(data.Payment.ReturnCode){
                     case "05":
                         res.status(400).send({
@@ -169,7 +169,7 @@ exports.post = async(req, res, next) => {
                         });
                         break;
                     default:
-                        repository.post({
+                        await repository.post({
                             data: Date.now(),
                             shelf_life: validade,
                             ativo: true,
@@ -178,7 +178,7 @@ exports.post = async(req, res, next) => {
                             plan: req.body.plan
                         });
 
-                        paymentrepository.post({
+                        await paymentrepository.post({
                             payment: data.Payment.PaymentId,
                             date: Date.now(),
                             user: user._id
@@ -259,7 +259,7 @@ exports.change = async(req, res, next) =>  {
         };
 
         cielo.creditCard.simpleTransaction(dadosSale)
-            .then((data) => {
+            .then(async(data) => {
                 switch(data.Payment.ReturnCode){
                     case "05":
                         res.status(400).send({
@@ -297,7 +297,7 @@ exports.change = async(req, res, next) =>  {
                         });
                         break;
                     default:
-                        repository.change({
+                        await repository.change({
                             data: Date.now(),
                             validade: validade,
                             ativo: true,
@@ -305,7 +305,7 @@ exports.change = async(req, res, next) =>  {
                             plan: req.body.plan
                         }, req.body.user);
 
-                        paymentrepository.post({
+                        await paymentrepository.post({
                             payment: data.Payment.PaymentId,
                             date: Date.now(),
                             user: user._id
