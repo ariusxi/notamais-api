@@ -169,7 +169,7 @@ exports.post = async(req, res, next) => {
                         });
                         break;
                     default:
-                        await repository.post({
+                        repository.post({
                             data: Date.now(),
                             shelf_life: validade,
                             ativo: true,
@@ -178,7 +178,7 @@ exports.post = async(req, res, next) => {
                             plan: req.body.plan
                         });
 
-                        await paymentrepository.post({
+                        paymentrepository.post({
                             payment: data.Payment.PaymentId,
                             date: Date.now(),
                             user: user._id
@@ -297,7 +297,7 @@ exports.change = async(req, res, next) =>  {
                         });
                         break;
                     default:
-                        await repository.change({
+                        repository.change({
                             data: Date.now(),
                             validade: validade,
                             ativo: true,
@@ -305,7 +305,7 @@ exports.change = async(req, res, next) =>  {
                             plan: req.body.plan
                         }, req.body.user);
 
-                        await paymentrepository.post({
+                        paymentrepository.post({
                             payment: data.Payment.PaymentId,
                             date: Date.now(),
                             user: user._id
