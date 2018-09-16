@@ -10,14 +10,16 @@ exports.get = async() => {
 }
 
 exports.getById = async(id) => {
-    const res = await Payment.findById(id);
+    const res = await Payment.findById(id)
+    .populate('user');
     return res;
 }
 
 exports.getByUser = async(user) => {
     const res = await Payment.find({
         user: user
-    });
+    })
+    .populate('user');
     return res;
 }
 
