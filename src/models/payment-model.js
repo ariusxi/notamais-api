@@ -8,6 +8,10 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    paymentType: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         required: true

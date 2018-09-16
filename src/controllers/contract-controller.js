@@ -175,12 +175,14 @@ exports.post = async(req, res, next) => {
                             ativo: true,
                             value: preco,
                             user: req.body.user,
-                            plan: req.body.plan
+                            plan: req.body.plan,
+                            type: type
                         });
 
                         await paymentrepository.post({
                             payment: data.Payment.PaymentId,
                             date: Date.now(),
+                            paymentType: cardType,
                             user: user._id
                         });
 

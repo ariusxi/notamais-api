@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const Payment = mongoose.model('Payment');
 
 exports.get = async() => {
-    const res = await Payment.find({});
+    const res = await Payment.find({})
+    .populate('user');
     return res;
 }
 
