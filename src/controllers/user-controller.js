@@ -63,14 +63,14 @@ exports.post = async(req, res, next) => {
         const emailUser = await repository.getByEmail(req.body.email);
         const cpfUser = await personrepository.getByCpf(req.body.cpf);
 
-        if(emailUser.length >  0){
+        if(emailUser){
             res.status(400).send({
                 message: 'Já existe uma conta cadastrada com esse email'
             });
             return;
         }
 
-        if(cpfUser.length > 0){
+        if(cpfUser){
             res.status(400).send({
                 message: 'Já existe uma conta cadastrada com esse cpf'
             });
@@ -116,7 +116,7 @@ exports.post = async(req, res, next) => {
         });
     }catch(e){
         res.status(500).send({
-            message: 'Falha ao processar sua requisição',
+            message: 'Falha  ao processar sua requisição',
             data: e
         });
     }
@@ -188,14 +188,14 @@ exports.postCounter = async(req, res, next) => {
         const emailUser = await repository.getByEmail(req.body.email);
         const cpfUser = await personrepository.getByCpf(req.body.cpf);
 
-        if(emailUser.length >  0){
+        if(emailUser){
             res.status(400).send({
                 message: 'Já existe uma conta cadastrada com esse email'
             });
             return;
         }
 
-        if(cpfUser.length > 0){
+        if(cpfUser){
             res.status(400).send({
                 message: 'Já existe uma conta cadastrada com esse cpf'
             });
