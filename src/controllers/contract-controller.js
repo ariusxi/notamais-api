@@ -183,6 +183,7 @@ exports.post = async(req, res, next) => {
                             payment: data.Payment.PaymentId,
                             date: Date.now(),
                             paymentType: cardType,
+                            value: preco,
                             user: user._id
                         });
 
