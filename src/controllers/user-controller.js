@@ -113,10 +113,6 @@ exports.post = async(req, res, next) => {
         );
 
         let telephone = req.body.telephone;
-        telephone.replace("(", "");
-        telephone.replace(")", "");
-        telephone.replace("-", "");
-        telephone.replace(" ", "");
 
         smsService.send(
             telephone,
