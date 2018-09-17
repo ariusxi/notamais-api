@@ -72,8 +72,6 @@ exports.post = async(req, res, next) => {
             return;
         }
 
-        console.log(req.body);
-
         let name = req.files.file.name;
 
         let ext = req.files.file.name.split(".")[1];
@@ -144,7 +142,7 @@ exports.post = async(req, res, next) => {
 
         });
     }catch(e){
-        res.status(e).send({
+        res.status(500).send({
             message: 'Falha ao processar sua requisição',
             data: e
         });
