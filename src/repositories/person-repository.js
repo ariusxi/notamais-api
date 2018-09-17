@@ -17,6 +17,13 @@ exports.getByCpf = async(cpf) => {
     return res;
 }
 
+exports.getByUser = async(user) => {
+    const res = await Person.findOne({
+        user: user
+    });
+    return res;
+}
+
 exports.create = async(data) => {
     var person = new Person(data);
     await person.save();
