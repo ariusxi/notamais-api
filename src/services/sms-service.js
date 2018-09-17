@@ -1,13 +1,23 @@
 'use strict';
-const config = require('../config');
-const client = require('twilio')(config.paramsTwilio.apiKey, config.paramsTwilio.apiSecret, {accountSid: config.paramsTwilio.accountSid});
 
 exports.send = async(to, body) => {
-    client.messages.create({
-        body: body,
-        from: '+17343596910',
-        to: to
-    }).then((message) => {
-        console.log(message.sid);
-    }).done();
+    let request = require('request');
+
+    let options = {
+        url: "https://platform.clickatell.com/messages",
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "WFaPj5HtRu6HexYmYhiu0g=="
+        },
+        json: {
+            content: body,
+            to: ["5511"+to]
+        }
+    };
+
+    request(options, (error, response, body) => {
+        return response.statusCode;
+    });
 }
