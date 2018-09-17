@@ -59,8 +59,6 @@ exports.test = async(req, res, next) => {
         const user = await userrepository.getById(req.body.user);
         const client = await clientrepository.getByUser(req.body.user);
 
-        console.log(plan);
-
         emailService.send(
             user.email,
             'Periodo de testes iniciado',
