@@ -53,11 +53,13 @@ exports.getByUser = async(req, res, next) => {
 exports.test = async(req, res, next) => {
     try{
         let validade = new Date();
-        let plan = await planrepository.get('5b8d629cc67ec50014abda73');
+        let plan = await planrepository.getById('5b9528004b4b744e90c93d6c');
         validade.setDate(validade.getDate() + 7);
 
         const user = await userrepository.getById(req.body.user);
         const client = await clientrepository.getByUser(req.body.user);
+
+        console.log(plan);
 
         emailService.send(
             user.email,
@@ -65,9 +67,15 @@ exports.test = async(req, res, next) => {
             global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido<br/>Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema')
         );
 
+        let telephone = client.telephone;
+        telephone = telephone.replace("(", "");
+        telephone = telephone.replace(")", "");
+        telephone = telephone.replace("-", "");
+        telephone = telephone.replace(" ", "");
+
         smsService.send(
-            client.telephone,
-            'Olá, <strong>'+user.name+'</strong>, seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido<br/>Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
+            telephone,
+            'Olá, '+user.name+', seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido. Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
         );
 
         await repository.post({
@@ -199,12 +207,18 @@ exports.post = async(req, res, next) => {
                         emailService.send(
                             user.email,
                             'Plano contratado com sucesso',
-                            global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
+                            global.EMAIL_TMPL.replace('{0}', 'Olá <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
                         );
 
+                        let telephone = client.telephone;
+                        telephone = telephone.replace("(", "");
+                        telephone = telephone.replace(")", "");
+                        telephone = telephone.replace("-", "");
+                        telephone = telephone.replace(" ", "");
+
                         smsService.send(
-                            client.telephone,
-                            'Olá, <strong>'+user.name+'</strong>, seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido<br/>Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
+                            telephone,
+                            'Olá '+user.name+', seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido. Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
                         );
                 
                         res.status(201).send({
@@ -333,6 +347,17 @@ exports.change = async(req, res, next) =>  {
                             user.email,
                             'Plano contratado com sucesso',
                             global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
+                        );
+
+                        let telephone = client.telephone;
+                        telephone = telephone.replace("(", "");
+                        telephone = telephone.replace(")", "");
+                        telephone = telephone.replace("-", "");
+                        telephone = telephone.replace(" ", "");
+
+                        smsService.send(
+                            telephone,
+                            'Olá '+user.name+', seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido. Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
                         );
                 
                         res.status(201).send({
