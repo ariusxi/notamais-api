@@ -10,6 +10,13 @@ exports.get = async(id) => {
     return res;
 }
 
+exports.getByUser = async(user) => {
+    const res = await Client.find({
+        user: user
+    });
+    return res;
+}
+
 exports.create = async(data) =>  {
     var client = new Client(data);
     return await client.save();
