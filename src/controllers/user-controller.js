@@ -12,6 +12,7 @@ const config = require('../config');
 
 const emailService = require('../services/email-service');
 const authService = require('../services/auth-service');
+const smsService = require('../services/sms-service');
 
 exports.get = async(req, res, next) => {
     try{
@@ -110,6 +111,17 @@ exports.post = async(req, res, next) => {
             'Bem vindo ao Nota Mais',
             global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta https://notamais.herokuapp.com/acess-user.jsp?id='+user._id)
         );
+
+        let telephone = req.body.telephone;
+        telephone.replace("(", "");
+        telephone.replace(")", "");
+        telephone.replace("-", "");
+        telephone.replace(" ", "");
+
+        smsService.send(
+            telephone,
+            'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta https://notamais.herokuapp.com/acess-user.jsp?id='+user._id
+        )
 
         res.status(201).send({
             message: 'Cadastro efetuado com sucesso, por favor confirme o cadastro pelo email '+req.body.email
