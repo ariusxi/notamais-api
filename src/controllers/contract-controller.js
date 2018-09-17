@@ -51,7 +51,7 @@ exports.getByUser = async(req, res, next) => {
 }
 
 exports.test = async(req, res, next) => {
-    
+    try{
         let validade = new Date();
         let plan = await planrepository.getById('5b9528004b4b744e90c93d6c');
         validade.setDate(validade.getDate() + 7);
@@ -84,7 +84,12 @@ exports.test = async(req, res, next) => {
         res.status(201).send({
             message: 'Periodo de testes iniciado com sucesso'
         });
-    
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
 }
 
 exports.post = async(req, res, next) => {
