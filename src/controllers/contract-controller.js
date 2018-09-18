@@ -57,7 +57,6 @@ exports.test = async(req, res, next) => {
         validade.setDate(validade.getDate() + 7);
 
         const user = await userrepository.getById(req.body.user);
-        const client = await clientrepository.getByUser(req.body.user);
 
         emailService.send(
             user.email,
@@ -66,11 +65,6 @@ exports.test = async(req, res, next) => {
         );
 
         let telephone = client.telephone;
-
-        smsService.send(
-            telephone,
-            'Olá, '+user.name+', seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido. Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
-        );
 
         await repository.post({
             data: Date.now(),
@@ -96,7 +90,6 @@ exports.post = async(req, res, next) => {
     try{
         let user = await userrepository.getById(req.body.user);
         let plan = await planrepository.getById(req.body.plan);
-        let client = await clientrepository.getByUser(req.body.user);
         let cardType = req.body.cardType;
         let type = "creditCard";
         let validade = new Date();
@@ -203,14 +196,7 @@ exports.post = async(req, res, next) => {
                             'Plano contratado com sucesso',
                             global.EMAIL_TMPL.replace('{0}', 'Olá <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
                         );
-
-                        let telephone = client.telephone;
-
-                        smsService.send(
-                            telephone,
-                            'Olá '+user.name+', seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido. Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
-                        );
-                
+                    
                         res.status(201).send({
                             message: 'Plano contratado com sucesso'
                         });
@@ -230,7 +216,6 @@ exports.change = async(req, res, next) =>  {
     try{
         let user = await userrepository.getById(req.body.user);
         let plan = await planrepository.getById(req.body.plan);
-        let client = await clientrepository.getByUser(req.body.user);
         let card = {};
         let cardType = req.body.cardType;
         let type = "creditCard";
@@ -338,14 +323,7 @@ exports.change = async(req, res, next) =>  {
                             'Plano contratado com sucesso',
                             global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+user.name+'</strong>, seu plano '+plan.name+' foi contratado com sucesso<br/>O ID da sua transação é '+data.Payment.PaymentId)
                         );
-
-                        let telephone = client.telephone;
-
-                        smsService.send(
-                            telephone,
-                            'Olá '+user.name+', seu periodo de testes foi iniciado, após sete dias seu periodo plano de teste não será mais válido. Após isso será necessário que você contrate um plano para prosseguir a utilização do sistema'
-                        );
-                
+                           
                         res.status(201).send({
                             message: 'Plano contratado com sucesso'
                         });

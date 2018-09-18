@@ -112,13 +112,6 @@ exports.post = async(req, res, next) => {
             global.EMAIL_TMPL.replace('{0}', 'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta https://notamais.herokuapp.com/acess-user.jsp?id='+user._id)
         );
 
-        let telephone = req.body.telephone;
-
-        smsService.send(
-            telephone,
-            'Olá, <strong>'+req.body.name+'</strong>, seja bem vindo ao Nota Mais!<br/>Clique no link para ativar a sua conta https://notamais.herokuapp.com/acess-user.jsp?id='+user._id
-        )
-
         res.status(201).send({
             message: 'Cadastro efetuado com sucesso, por favor confirme o cadastro pelo email '+req.body.email
         });
