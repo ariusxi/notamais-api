@@ -217,7 +217,7 @@ exports.change = async(req, res, next) =>  {
         let user = await userrepository.getById(req.body.user);
         let plan = await planrepository.getById(req.body.plan);
         let card = {};
-        let cardType = req.body.cardType;
+        var cardType = req.body.cardType;
         let type = "creditCard";
         let validade = new Date();
         validade.setMonth(validade.getMonth() + 1);
@@ -226,6 +226,7 @@ exports.change = async(req, res, next) =>  {
         }
         if(req.body.card){
             card = await cardrepository.getById(req.body.card);
+            cardType = card.type;
         }else{
             card = {
                 CardNumber: req.body.CardNumber,
@@ -314,6 +315,8 @@ exports.change = async(req, res, next) =>  {
 
                         await paymentrepository.post({
                             payment: data.Payment.PaymentId,
+                            value: preco,
+                            paymentType: cardType,
                             date: Date.now(),
                             user: user._id
                         });
