@@ -17,4 +17,6 @@ router.get('/cancel-payment', controller.cancelPayment);
 
 router.post('/upload-photo', controller.photo);
 
+router.get('/danfe', controller.danfeGen);
+
 module.exports = router;
