@@ -217,7 +217,7 @@ exports.change = async(req, res, next) =>  {
         let user = await userrepository.getById(req.body.user);
         let plan = await planrepository.getById(req.body.plan);
         let card = {};
-        var cardType = req.body.cardType;
+        let cardType = req.body.cardType;
         let type = "creditCard";
         let validade = new Date();
         validade.setMonth(validade.getMonth() + 1);

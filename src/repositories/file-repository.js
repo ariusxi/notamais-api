@@ -22,6 +22,11 @@ exports.getByUser = async(id) => {
     return res;
 }
 
+exports.getAll = async() => {
+    const res = await File.find({});
+    return res;
+}
+
 exports.post = async(data) => {
     var file = new File(data);
     await file.save();

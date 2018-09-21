@@ -42,6 +42,18 @@ exports.getById = async(req, res, next) => {
     }
 }
 
+exports.getAdmin = async(req, res, next) => {
+    try{
+        var data = await response.getAll();
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.post = async(req, res, next) => {
     try{
         let folder = path.resolve(__dirname);
