@@ -41,11 +41,10 @@ exports.getById = async(req, res, next) => {
 exports.getByUser = async(req, res, next) => {
     try{
         let user = await userrepository.getById(req.params.id);
-        let person = await personrepository.getByUser(req.params.id);
         let company = req.params.id;
 
         if(user.roles[0] == 'employee'){
-            let companyprofile = await employeerepository.getByPerson(person._id);
+            let companyprofile = await employeerepository.getByPerson(user._id);
             company = await userrepository.getById(companyprofile.user)._id;
         }
 
