@@ -40,7 +40,16 @@ exports.getById = async(req, res, next) => {
 
 exports.getByUser = async(req, res, next) => {
     try{
-        var data = await repository.getByUser(req.params.id);
+        let user = await userrepository.getById(req.params.id);
+        let person = await personrepository.getByUser(req.params.id);
+        let company = req.params.id;
+
+        if(user.roles[0] == 'employee'){
+            let companyprofile = await employeerepository.getByPerson(person._id);
+            company = await userrepository.getById(companyprofile.user)._id;
+        }
+
+        var data = await repository.getByUser(company);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({

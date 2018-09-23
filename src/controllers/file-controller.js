@@ -16,7 +16,7 @@ exports.get = async(req, res, next) => {
         let company = req.params.id;
 
         if(user.roles[0] == 'employee'){
-            var companyprofile = await employeerepository.getByPerson(person._id);
+            let companyprofile = await employeerepository.getByPerson(person._id);
             company = await userrepository.getById(companyprofile.user)._id;
         }
 
@@ -72,8 +72,9 @@ exports.post = async(req, res, next) => {
         }
 
         if(user.roles[0] == 'employee'){
-            var companyprofile = await employeerepository.getByPerson(person._id);
+            let companyprofile = await employeerepository.getByPerson(person._id);
             company = await userrepository.getById(companyprofile.user)._id;
+            files = await userrepository.getByUser(company);
         }
 
         //Verificando quantidade de XML
