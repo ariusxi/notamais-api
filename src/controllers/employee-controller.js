@@ -13,7 +13,7 @@ const authService = require('../services/auth-service');
 exports.get = async(req, res, next) => {
     try{
         var data  = await repository.get(req.params.id);
-        data.forEach(function(value, i){
+        data.forEach(async(value, i) => {
             var person = await personrepository.getByUser(value._id);
             data[i] = data[i].concat(person);
         });
