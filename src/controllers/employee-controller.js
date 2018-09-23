@@ -66,7 +66,7 @@ exports.post = async(req, res, next) => {
 
         await repository.post({
             admin: false,
-            person: user._id,
+            person: person._id,
             user: req.params.id
         }); 
 
