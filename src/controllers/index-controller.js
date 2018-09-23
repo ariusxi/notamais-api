@@ -10,7 +10,7 @@ const md5 = require('md5');
 exports.get = async(req, res, next) => {
     res.status(200).send({
         title: 'Node Store API',
-        version: "1.0.0"
+        version: "1.0.4"
     });
 }
 
