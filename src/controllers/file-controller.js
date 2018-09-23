@@ -12,11 +12,10 @@ const fs = require('fs');
 exports.get = async(req, res, next) => {
     try{
         let user = await userrepository.getById(req.params.id);
-        let person = await personrepository.getByUser(req.params.id);
         let company = req.params.id;
 
         if(user.roles[0] == 'employee'){
-            let companyprofile = await employeerepository.getByPerson(person._id);
+            let companyprofile = await employeerepository.getByPerson(user._id);
             company = await userrepository.getById(companyprofile.user)._id;
         }
 
@@ -44,7 +43,7 @@ exports.getById = async(req, res, next) => {
 
 exports.getAdmin = async(req, res, next) => {
     try{
-        var data = await response.getAll();
+        var data = await repository.getAll();
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -61,7 +60,6 @@ exports.post = async(req, res, next) => {
         let contract = await contractrepository.getByUser(req.params.id);
         let files = await repository.getByUser(req.params.id);
         let user = await userrepository.getById(req.params.id);
-        let person = await personrepository.getByUser(req.params.id);
         let company = req.params.id;
 
         if(!req.files){
@@ -72,7 +70,7 @@ exports.post = async(req, res, next) => {
         }
 
         if(user.roles[0] == 'employee'){
-            let companyprofile = await employeerepository.getByPerson(person._id);
+            let companyprofile = await employeerepository.getByPerson(user._id);
             company = await userrepository.getById(companyprofile.user)._id;
             files = await userrepository.getByUser(company);
         }
