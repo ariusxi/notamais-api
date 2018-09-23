@@ -43,7 +43,7 @@ exports.getById = async(req, res, next) => {
 
 exports.getAdmin = async(req, res, next) => {
     try{
-        var data = await response.getAll();
+        var data = await repository.getAll();
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
