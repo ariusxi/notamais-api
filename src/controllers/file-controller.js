@@ -73,7 +73,7 @@ exports.post = async(req, res, next) => {
             let companyprofile = await employeerepository.getByPerson(user._id);
             company = companyprofile.user;
             contract = await contractrepository.getByUser(company);
-            files = await userrepository.getByUser(company);
+            files = await userrepository.getById(company);
         }
 
         //Verificando quantidade de XML
