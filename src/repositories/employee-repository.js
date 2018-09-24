@@ -12,7 +12,7 @@ exports.get = async(id) => {
 }
 
 exports.getByPerson = async(person) => {
-    const res = await Employee.find({
+    const res = await Employee.findOne({
         person: person
     });
     return res;

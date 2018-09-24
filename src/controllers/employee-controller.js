@@ -9,14 +9,11 @@ const md5 = require('md5');
 
 const emailService = require('../services/email-service');
 const authService = require('../services/auth-service');
+const utilService = require('../services/util-service');
 
 exports.get = async(req, res, next) => {
     try{
         var data  = await repository.get(req.params.id);
-        data.forEach(async(value, i) => {
-            var person = await personrepository.getByUser(value._id);
-            data[i] = data[i].concat(person);
-        });
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
