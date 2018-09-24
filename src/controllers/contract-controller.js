@@ -8,6 +8,7 @@ const cardrepository = require('../repositories/card-repository');
 const planrepository = require('../repositories/plan-repository');
 const clientrepository = require('../repositories/client-repository');
 const paymentrepository = require('../repositories/payment-repository');
+const employeerepository = require('../repositories/employee-repository');
 
 //Chamando services
 const emailService = require('../services/email-service');
@@ -44,10 +45,9 @@ exports.getByUser = async(req, res, next) => {
         let company = req.params.id;
 
         if(user.roles[0] == 'employee'){
-            let companyprofile = await employeerepository.getByPerson(user._id);
-            company = await userrepository.getById(companyprofile.user)._id;
+            let companyprofile = await employeerepository.getByPerson(req.params.id);
+            company = companyprofile.user;
         }
-
         var data = await repository.getByUser(company);
         res.status(200).send(data);
     }catch(e){

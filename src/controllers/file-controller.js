@@ -4,7 +4,7 @@
 const repository = require('../repositories/file-repository');
 const contractrepository = require('../repositories/contract-repository');
 const userrepository = require('../repositories/user-repository');
-const personrepository = require('../repositories/person-repository');
+const employeerepository = require('../repositories/employee-repository');
 const path = require('path');
 const md5 = require('md5');
 const fs = require('fs');
@@ -15,15 +15,15 @@ exports.get = async(req, res, next) => {
         let company = req.params.id;
 
         if(user.roles[0] == 'employee'){
-            let companyprofile = await employeerepository.getByPerson(user._id);
-            company = await userrepository.getById(companyprofile.user)._id;
+            let companyprofile = await employeerepository.getByPerson(req.params.id);
+            company = companyprofile.user;
         }
 
         var data = await repository.get(company);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
-            message: 'Falha ao processar sua requisição',
+            message: 'Falha ao processar sua requsição',
             data: e
         });
     }
@@ -71,7 +71,8 @@ exports.post = async(req, res, next) => {
 
         if(user.roles[0] == 'employee'){
             let companyprofile = await employeerepository.getByPerson(user._id);
-            company = await userrepository.getById(companyprofile.user)._id;
+            company = companyprofile.user;
+            contract = await contractrepository.getByUser(company);
             files = await userrepository.getByUser(company);
         }
 
