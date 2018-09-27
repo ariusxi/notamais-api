@@ -27,6 +27,7 @@ const Card = require('./models/card-model');
 const Contract = require('./models/contract-model');
 const File = require('./models/file-model');
 const Payment = require('./models/payment-model');
+const Relationship = require('./models/relationshop-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');
@@ -38,6 +39,7 @@ const cardroute = require('./routes/card-route');
 const contractroute = require('./routes/contract-route');
 const fileroute = require('./routes/file-route');
 const paymentroute = require('./routes/payment-route');
+const relationshiproute = require('./routes/relationship-route');
 
 //Limitando tamanho da requisição
 app.use(bodyParser.json({

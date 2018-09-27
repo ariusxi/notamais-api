@@ -25,6 +25,25 @@ exports.getByEmail = async(email) => {
     return res;
 }
 
+exports.getCounters = async(search) => {
+    const res = await User.find({
+        $or: [{
+            name: {
+                '$regex' : search,
+                '$options': 'i'
+            },
+            roles: ["counter"]
+        },{
+            email: {
+                '$regex' : search,
+                '$options': 'i'
+            },
+            roles: ["counter"]
+        }]
+    });
+    return res;
+}
+
 exports.authenticate = async(data) => {
     const res = await User.findOne({
         $or :[{
