@@ -27,7 +27,7 @@ const Card = require('./models/card-model');
 const Contract = require('./models/contract-model');
 const File = require('./models/file-model');
 const Payment = require('./models/payment-model');
-const Relationship = require('./models/relationshop-model');
+const Relationship = require('./models/relationship-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');
