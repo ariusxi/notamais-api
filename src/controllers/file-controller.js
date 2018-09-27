@@ -126,7 +126,7 @@ exports.post = async(req, res, next) => {
             }
 
             request.post({
-                url: 'https://cdn-notamais.herokuapp.com/' + qString,
+                url: 'http://cdnnotamais.com/' + qString,
                 formData: formData,
                 "rejectUnauthorized": false
             }, async(err, httpResponse, body) => {
@@ -136,7 +136,7 @@ exports.post = async(req, res, next) => {
                     name: req.body.name,
                     description: req.body.description,
                     date: Date.now(),
-                    xml: "https://cdn-notamais.herokuapp.com" + response.url,
+                    xml: "http://cdnnotamais.com" + response.url,
                     user: company
                 });
 
@@ -147,7 +147,7 @@ exports.post = async(req, res, next) => {
 
                 res.status(201).send({
                     message: 'Arquivo enviado com sucesso',
-                    path: "https://cdn-notamais.herokuapp.com" + response.url
+                    path: "http://cdnnotamais.com" + response.url
                 });
 
             });
