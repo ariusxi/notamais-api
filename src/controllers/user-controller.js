@@ -7,12 +7,12 @@ const recoverrepository = require('../repositories/recover-repository');
 const personrepository = require('../repositories/person-repository');
 const contractrepository = require('../repositories/contract-repository');
 const authrepository = require('../repositories/auth-repository');
+const relationshiprepository = require('../repositories/relationship-repository');
 const md5 = require('md5');
 const config = require('../config');
 
 const emailService = require('../services/email-service');
 const authService = require('../services/auth-service');
-const smsService = require('../services/sms-service');
 
 exports.get = async(req, res, next) => {
     try{
@@ -43,6 +43,24 @@ exports.getProfile = async(req, res, next) => {
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processsar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.searchCounters = async(req, res, next) =>  {
+    try{
+        var data = await repository.getCounters(req.body.search);
+        for(let i = 0; i < data.length; i++){
+            let request = await relationshiprepository.getByBoth(req.params.id, data[i]._id);
+            data[i]= {'pending': 0, 'counter': data[i]};
+            if(request.length > 0)
+                data[i] = {'pending': 1, 'counter': data[i] };
+        }
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
             data: e
         });
     }

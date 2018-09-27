@@ -25,5 +25,6 @@ router.get('/get-profile/:id', authService.authorize, controller.getProfile);
 router.get('/get-user/:id', authService.isAdmin, controller.getProfile);
 router.post('/reset-password/:id', authService.authorize, controller.updatePassword);
 router.post('/update-profile/:id', authService.authorize, controller.updateProfile);
+router.post('/search-counter/:id', authService.authorize, controller.searchCounters);
 
 module.exports = router;
