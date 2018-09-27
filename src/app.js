@@ -68,6 +68,7 @@ app.use('/cards', cardroute);
 app.use('/contracts', contractroute);
 app.use('/files', fileroute);
 app.use('/payments', paymentroute);
+app.use('/relationships', relationshiproute);
 
 //Exportando APP
 module.exports = app;
