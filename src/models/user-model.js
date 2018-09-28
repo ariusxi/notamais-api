@@ -31,6 +31,10 @@ const schema = new Schema({
         type: Date,
         required: true
     },
+    image: {
+        type: String,
+        required: false
+    },
     roles: [{
         type: String,
         required: true,
