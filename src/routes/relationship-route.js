@@ -11,6 +11,7 @@ const authService = require('../services/auth-service');
 router.get('/user/:id', authService.authorize, controller.getByUser);
 router.get('/counter/:id', authService.authorize, controller.getByCounter);
 router.get('/get/:id', authService.authorize, controller.getById);
+router.get('/accept/:id', authService.authorize, controller.accept);
 router.post('/create', authService.authorize, controller.create);
 router.delete('/delete/:id', authService.authorize, controller.delete);
 

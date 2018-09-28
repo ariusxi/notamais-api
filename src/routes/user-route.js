@@ -3,11 +3,11 @@
 const express = require('express');
 const router = express.Router();
 
-//chamando controllers
+//Chamando controllers
 const controller = require('../controllers/user-controller');
 const authService = require('../services/auth-service');
 
-//definindo cada tipo de requisição
+//Definindo cada tipo de requisição
 router.get('/confirmed/:id', controller.confirmed);
 router.get('/activate/:id', controller.activate);
 router.post('/create', controller.post);

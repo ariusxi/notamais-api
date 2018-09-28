@@ -55,7 +55,7 @@ exports.getByCounter = async(req, res, next) => {
 
 exports.create = async(req, res, next) => {
     try{
-        await repository.create({
+        await repository.save({
             user: req.body.user,
             counter: req.body.counter,
             date: Date.now(),
@@ -64,6 +64,20 @@ exports.create = async(req, res, next) => {
 
         res.status(200).send({
             message: 'Solitação enviada com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.accept = async(req, res, next) => {
+    try{
+        await repository.accept(req.params.id);
+        res.status(200).send({
+            message:  'Convite de contrato aceito com sucesso'
         });
     }catch(e){
         res.status(500).send({

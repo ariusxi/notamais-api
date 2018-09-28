@@ -48,6 +48,13 @@ exports.save = async(data) =>  {
     return await relationship.save();
 }
 
+exports.accept = async(id) => {
+    const res = await Relationship.updateOne({ _id: id },{
+        approved: true
+    });
+    return res;
+}
+
 exports.delete = async(id) =>  {
     await Relationship.findByIdAndRemove(id);
 }
