@@ -5,7 +5,10 @@ const repository = require('../repositories/file-repository');
 const contractrepository = require('../repositories/contract-repository');
 const userrepository = require('../repositories/user-repository');
 const employeerepository = require('../repositories/employee-repository');
+const relationshiprepository = require('../repositories/relationship-repository');
+const request = require('request');
 const path = require('path');
+const parser = require('xml2json');
 const md5 = require('md5');
 const fs = require('fs');
 
@@ -17,6 +20,10 @@ exports.get = async(req, res, next) => {
         if(user.roles[0] == 'employee'){
             let companyprofile = await employeerepository.getByPerson(req.params.id);
             company = companyprofile.user;
+        }
+        if(user.roles[0] == 'counter'){
+            let companyprofile = await relationshiprepository.getByCounter(req.params.id);
+            company = companyprofile.user._id;
         }
 
         var data = await repository.get(company);
@@ -97,6 +104,7 @@ exports.post = async(req, res, next) => {
                     message: 'Falha ao processar sua requisição',
                     data: error
                 });
+                return;
             }
 
             let request = require('request');
@@ -160,6 +168,46 @@ exports.post = async(req, res, next) => {
         });
     }
     
+}
+
+exports.generateDanfe = async(req, res, next) => {
+    try{
+        let file = await repository.getById(req.params.id);
+
+        console.log(file);
+
+        request(file.xml, (error, response, body) => {
+            if(error) throw new error;
+            let xml = body.toString();
+            let json = parser.toJson(xml);
+            json = JSON.parse(json);
+            res.status(200).send(json);
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.generateNfe = async(req, res, next) => {
+    try{
+        let file = await repository.getById(req.params.id);
+
+        request(file.xml, (error, response, body) => {
+            if(error) throw new error;
+            let xml = body.toString();
+            let json = parser.toJson(xml);
+            json = JSON.parse(json);
+            res.status(200).send(json);
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
 }
 
 exports.delete = async(req, res, next) => {

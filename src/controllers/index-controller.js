@@ -6,6 +6,8 @@ const cielo = require('cielo')(config.paramsCielo);
 const path = require('path');
 const fs = require('fs');
 const md5 = require('md5');
+const parser = require('xml2json');
+const request = require('request');
 
 exports.get = async(req, res, next) => {
     res.status(200).send({
@@ -306,6 +308,22 @@ exports.danfeGen = async(req, res, next) => {
             res.status(200).send({
                 message: 'Danfe gerada com sucesso'
             });
+        });
+    }
+}
+
+exports.getContent = async(req, res, next) => {
+    try{
+        request('http://cdnnotamais.com/xml/884086fe24c8ceeb3ae17fe70d61f5e1.xml', (error, response, body) => {
+            if(error) throw new error;
+            let xml = body.toString();
+            let json = parser.toJson(xml);
+            console.log(json);
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
         });
     }
 }

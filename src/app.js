@@ -28,6 +28,7 @@ const Contract = require('./models/contract-model');
 const File = require('./models/file-model');
 const Payment = require('./models/payment-model');
 const Relationship = require('./models/relationship-model');
+const NFe  = require('./models/nfe-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');
