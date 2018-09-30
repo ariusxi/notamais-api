@@ -251,7 +251,7 @@ exports.generateDanfe = async(req, res, next) => {
 exports.generateNfe = async(req, res, next) => {
     let file = await repository.getById(req.params.id);
     let user = await userrepository.getById(req.params.id);
-    let person = await userrepository.getByUser(req.params.id);
+    let person = await userrepository.getById(req.params.id);
     let client = await clientrepository.getByUser(req.params.id);
 
     request(file.xml, (error, response, body) => {
