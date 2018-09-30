@@ -11,7 +11,7 @@ exports.get = async(id) => {
 }
 
 exports.getByUser = async(user) => {
-    const res = await Client.find({
+    const res = await Client.findOne({
         user: user
     });
     return res;
@@ -28,6 +28,13 @@ exports.put = async(data, id) =>  {
         cnpj: data.cnpj,
         ie: data.ie,
         telephone: data.telephone
+    });
+    return res;
+}
+
+exports.putNfeId = async(nfe, id) => {
+    const res = await Client.updateOne({ user: id }, {
+        idNfe: nfe
     });
     return res;
 }

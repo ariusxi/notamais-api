@@ -4,8 +4,11 @@
 const repository = require('../repositories/file-repository');
 const contractrepository = require('../repositories/contract-repository');
 const userrepository = require('../repositories/user-repository');
+const personrepository = require('../repositories/person-repository');
+const clientrepository = require('../repositories/client-repository');
 const employeerepository = require('../repositories/employee-repository');
 const relationshiprepository = require('../repositories/relationship-repository');
+const nfe = require('nfe-io')('14jQsE8CpQ1lhtR934h7q49qAueUcoBef10CgzWZqTdjZXIiLHKpIy2F8fCBL10rkEw');
 const request = require('request');
 const path = require('path');
 const parser = require('xml2json');
@@ -170,6 +173,60 @@ exports.post = async(req, res, next) => {
     
 }
 
+exports.generateCompany = async(req, res, next) =>  {
+    try{
+        let user = await userrepository.getById(req.params.id);
+        let person = await personrepository.getByUser(req.params.id);
+        let client = await clientrepository.getByUser(req.params.id);
+
+        client.cnpj = client.cnpj.replace(/[^\d]+/g,'');
+
+        let data = {
+            'federalTaxNumber': client.cnpj, 
+            'name': user.name,
+            'tradeName': user.name,
+            'municipalTaxNumber': client.ie,
+            'taxRegime': 'SimplesNacional',
+            'specialTaxRegime': 'Nenhum',
+            'address': {
+                'country': 'BRA',
+                'postalCode': '70073901',
+                'street': 'Outros Quadra 1 Bloco G Lote 32',
+                'number': 'S/N',
+                'additionalInformation': 'QUADRA 01 BLOCO G',
+                'district': 'Asa Sul', 
+                'city': { 
+                    'code': '5300108',
+                    'name': 'Brasilia'
+                },
+                'state': 'DF'
+            }
+        };
+
+        nfe.companies.create(data, async(err, entity) => {
+            if(err){ 
+                res.status(500).send({
+                    message: 'Falha ao processar sua requisição',
+                    data: err
+                });
+            }else{
+                let idNfe = entity.location.split("/")[2];
+
+                await clientrepository.putNfeId(idNfe, req.params.id);
+
+                res.status(201).send({
+                    message: 'Empresa registrada no NFE com sucesso'
+                });
+            }
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.generateDanfe = async(req, res, next) => {
     try{
         let file = await repository.getById(req.params.id);
@@ -192,22 +249,51 @@ exports.generateDanfe = async(req, res, next) => {
 }
 
 exports.generateNfe = async(req, res, next) => {
-    try{
-        let file = await repository.getById(req.params.id);
+    let file = await repository.getById(req.params.id);
+    let user = await userrepository.getById(req.params.id);
+    let person = await userrepository.getByUser(req.params.id);
+    let client = await clientrepository.getByUser(req.params.id);
 
-        request(file.xml, (error, response, body) => {
-            if(error) throw new error;
-            let xml = body.toString();
-            let json = parser.toJson(xml);
-            json = JSON.parse(json);
-            res.status(200).send(json);
-        });
-    }catch(e){
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
-    }
+    request(file.xml, (error, response, body) => {
+        if(error) throw new error;
+        let xml = body.toString();
+        let json = parser.toJson(xml);
+        json = JSON.parse(json);
+
+        /*let data = {
+            'cityServiceCode': '2690',
+            'description': 'TESTE EMISSAO',
+            'servicesAmount': 100.00,
+            'borrower': {
+                'type': 'LegalEntity',
+                'federalTaxNumber': 191,
+                'name': 'BANCO DO BRASIL SA',
+                'email': 'exemplo@bb.com.br',
+                'address': {
+                    'country': 'BRA',
+                    'postalCode': '70073901',
+                    'street': 'Outros Quadra 1 Bloco G Lote 32',
+                    'number': 'S/N',
+                    'additionalInformation': 'QUADRA 01 BLOCO G',
+                    'district': 'Asa Sul',
+                    'city': {
+                        'code': '5300108',
+                        'name': 'Brasilia'
+                    },
+                    'state': 'DF'
+                }
+            }
+        };
+    
+        nfe.serviceInvoices.create(
+             // ID da empresa, você deve copiar exatamente como está no painel
+            client.idNfe, data, (err, invoice) => {
+                if(err) console.error(err);
+                console.log(invoice);
+            }
+        );*/
+        res.status(200).send(json);
+    });
 }
 
 exports.delete = async(req, res, next) => {
