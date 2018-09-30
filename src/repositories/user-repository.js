@@ -82,9 +82,16 @@ exports.confirmed = async(id) => {
 }
 
 exports.updateProfile = async(data, id) => {
-    const res = await User.updateMany({ _id: id},{
+    const res = await User.updateMany({ _id: id },{
         name: data.name,
         email: data.email
+    });
+    return res;
+}
+
+exports.updateImage = async(data, id) => {
+    const res = await User.updateMany({ _id: id }, {
+        image: data.image
     });
     return res;
 }

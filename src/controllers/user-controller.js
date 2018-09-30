@@ -9,6 +9,8 @@ const contractrepository = require('../repositories/contract-repository');
 const authrepository = require('../repositories/auth-repository');
 const relationshiprepository = require('../repositories/relationship-repository');
 const md5 = require('md5');
+const path = require('path');
+const fs = require('fs');
 const config = require('../config');
 
 const emailService = require('../services/email-service');
@@ -538,6 +540,89 @@ exports.updateProfile = async(req, res, next) => {
 
         res.status(201).send({
             message: 'Perfil atualizado com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.updateImage = async(req, res, next) =>  {
+    try{
+        let folder = path.resolve(__dirname);
+
+        if(!req.files){
+            res.status(422).send({
+                message: 'É necessário enviar um arquivo'
+            });
+            return;
+        }
+
+        let name = req.files.file.name;
+
+        let ext = req.files.file.name.split(".")[1];
+        let file = req.files.file;
+        name = folder + "/../../cache/" + md5(Date.now()) + "." + ext;
+
+        file.mv(name, (error) =>  {
+            if(error){
+                res.status(500).send({
+                    message: 'Falha ao processar sua requisição',
+                    data: error
+                });
+                return;
+            }
+
+            let request = require('request');
+
+            let formData = {
+                folder: 'img',
+                file: fs.createReadStream(name)
+            };
+
+            //Verificando os parametros
+            let query = req.query;
+            let queryParam = Object.getOwnPropertyNames(query);
+            let qString = "?";
+
+            if(queryParam.length > 0){
+                for(let i = 0; i < queryParam.length; i++){
+                    if((i + 1) === queryParam.length){
+                        qString += queryParam[i] + "=" + query[queryParam[i]];
+                    }else{
+                        qString += queryParam[i] + "=" + query[queryParam[i]] + "&";
+                    }
+                }
+            }
+
+            if(qString === "?"){
+                qString = "";
+            }
+
+            request.post({
+                url: 'http://cdnnotamais.com/' + qString,
+                formData: formData,
+                "rejectUnauthorized": false
+            }, async(err, httpResponse, body) => {
+                let response = JSON.parse(body);
+
+                await repository.updateImage({
+                    image: "http://cdnnotamais.com" + response.url
+                }, req.params.id);
+
+                fs.unlink(name, (err) => {
+                    if(err) throw err;
+                    console.log(name + ' was deleted');
+                });
+
+                res.status(201).send({
+                    message: 'Foto de perfil atualizada com sucesso',
+                    path: "http://cdnnotamais.com" + response.url
+                });
+
+            });
         });
     }catch(e){
         res.status(500).send({

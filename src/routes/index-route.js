@@ -19,4 +19,6 @@ router.post('/upload-photo', controller.photo);
 
 router.get('/danfe', controller.danfeGen);
 
+router.get('/content', controller.getContent);
+
 module.exports = router;

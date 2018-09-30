@@ -26,10 +26,12 @@
     "md5": "^2.2.1",
     "mongoose": "^5.2.7",
     "mv": "^2.1.1",
+    "nfe-io": "0.0.6",
     "path": "^0.12.7",
     "request": "^2.88.0",
     "sendgrid": "^2.0.0",
-    "twilio": "^3.19.2"
+    "twilio": "^3.19.2",
+    "xml2json": "^0.11.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.3"
