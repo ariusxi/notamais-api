@@ -8,6 +8,7 @@ const personrepository = require('../repositories/person-repository');
 const clientrepository = require('../repositories/client-repository');
 const employeerepository = require('../repositories/employee-repository');
 const relationshiprepository = require('../repositories/relationship-repository');
+const filerepository = require('../repositories/file-repository');
 const nfe = require('nfe-io')('14jQsE8CpQ1lhtR934h7q49qAueUcoBef10CgzWZqTdjZXIiLHKpIy2F8fCBL10rkEw');
 const request = require('request');
 const path = require('path');
@@ -249,51 +250,62 @@ exports.generateDanfe = async(req, res, next) => {
 }
 
 exports.generateNfe = async(req, res, next) => {
-    let file = await repository.getById(req.params.id);
-    let user = await userrepository.getById(req.params.id);
-    let person = await userrepository.getById(req.params.id);
-    let client = await clientrepository.getByUser(req.params.id);
+    try{
+        let file = await repository.getById(req.params.id);
+        let user = await userrepository.getById(file.user);
+        let client = await clientrepository.getByUser(file.user);
 
-    request(file.xml, (error, response, body) => {
-        if(error) throw new error;
-        let xml = body.toString();
-        let json = parser.toJson(xml);
-        json = JSON.parse(json);
+        request(file.xml, (error, response, body) => {
+            if(error) throw new error;
+            let xml = body.toString();
+            let json = parser.toJson(xml);
+            json = JSON.parse(json);
 
-        /*let data = {
-            'cityServiceCode': '2690',
-            'description': 'TESTE EMISSAO',
-            'servicesAmount': 100.00,
-            'borrower': {
-                'type': 'LegalEntity',
-                'federalTaxNumber': 191,
-                'name': 'BANCO DO BRASIL SA',
-                'email': 'exemplo@bb.com.br',
-                'address': {
-                    'country': 'BRA',
-                    'postalCode': '70073901',
-                    'street': 'Outros Quadra 1 Bloco G Lote 32',
-                    'number': 'S/N',
-                    'additionalInformation': 'QUADRA 01 BLOCO G',
-                    'district': 'Asa Sul',
-                    'city': {
-                        'code': '5300108',
-                        'name': 'Brasilia'
-                    },
-                    'state': 'DF'
+            let data = {
+                'cityServiceCode': '2690',
+                'description': file.description,
+                'servicesAmount': json.NFe.infNFe.total.ICMSTot.vTotTrib,
+                'borrower': {
+                    'type': 'LegalEntity',
+                    'federalTaxNumber': 191,
+                    'name': user.name,
+                    'email': user.email,
+                    'address': {
+                        'country': 'BRA',
+                        'postalCode': '70073901',
+                        'street': 'Outros Quadra 1 Bloco G Lote 32',
+                        'number': 'S/N',
+                        'additionalInformation': 'QUADRA 01 BLOCO G',
+                        'district': 'Asa Sul',
+                        'city': {
+                            'code': '5300108',
+                            'name': 'Brasilia'
+                        },
+                        'state': 'DF'
+                    }
                 }
-            }
-        };
-    
-        nfe.serviceInvoices.create(
-             // ID da empresa, você deve copiar exatamente como está no painel
-            client.idNfe, data, (err, invoice) => {
-                if(err) console.error(err);
-                console.log(invoice);
-            }
-        );*/
-        res.status(200).send(json);
-    });
+            };
+        
+            nfe.serviceInvoices.create(
+                client.idNfe, data, async(err, invoice) => {
+                    if(err) console.error(err);
+                    
+                    let nfe = invoice.location.split("/")[5];
+
+                    await filerepository.putNfe(file._id, nfe);
+
+                    res.status(201).send({
+                        message: 'Nota fiscal emitida com sucesso'
+                    });
+                }
+            );
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
 }
 
 exports.delete = async(req, res, next) => {

@@ -24,6 +24,10 @@ const schema = new Schema({
         type: String,
         required: false
     },
+    nfe: {
+        type: String,
+        required: false
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

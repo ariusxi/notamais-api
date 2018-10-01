@@ -32,6 +32,11 @@ exports.post = async(data) => {
     await file.save();
 }
 
+exports.putNfe = async(id, nfe) => {
+    const res = File.updateOne({ _id: id },{ nfe: nfe });
+    return res;
+}
+
 exports.delete = async(id) => {
     await File.findByIdAndRemove(id, (err) => {
         console.log(err);
