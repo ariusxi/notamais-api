@@ -304,6 +304,8 @@ exports.authenticate = async(req, res, next) => {
             user: user._id
         });
 
+        const client = await clientrepository.getByUser(user._id);
+
         let contract = {
             active: false,
             data: {}
