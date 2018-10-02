@@ -218,7 +218,8 @@ exports.generateCompany = async(req, res, next) =>  {
                 await clientrepository.putNfeId(idNfe, req.params.id);
 
                 res.status(201).send({
-                    message: 'Empresa registrada no NFE com sucesso'
+                    message: 'Empresa registrada no NFE com sucesso',
+                    id: idNfe
                 });
             }
         });
