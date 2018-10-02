@@ -178,7 +178,7 @@ exports.danfeGen = async(req, res, next) => {
     let pathDoArquivo = path.join(__dirname + "./../../danfe", md5(Date.now())+'.pdf');
 
     let emitente = new Emitente();
-    emitente.comNome('Nota Mais');
+    emitente.comNome('Nota+');
     emitente.comLogotipo(path.join(__dirname, './../../danfe/img/logotipo.png'));
     emitente.comRegistroNacional('14.625.996/0001-35');
     emitente.comInscricaoEstadual('03.707.130-0');
@@ -301,13 +301,13 @@ exports.danfeGen = async(req, res, next) => {
                     message: 'Falha ao processar sua requisição',
                     data: err
                 });
+            }else{
+                pdf.pipe(fs.createWriteStream(pathDoArquivo));
+
+                res.status(200).send({
+                    message: 'Danfe gerada com sucesso'
+                });
             }
-
-            pdf.pipe(fs.createWriteStream(pathDoArquivo));
-
-            res.status(200).send({
-                message: 'Danfe gerada com sucesso'
-            });
         });
     }
 }
