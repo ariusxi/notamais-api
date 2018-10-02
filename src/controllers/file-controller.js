@@ -428,6 +428,13 @@ exports.generateNfe = async(req, res, next) => {
         let user = await userrepository.getById(file.user);
         let client = await clientrepository.getByUser(file.user);
 
+        if(!client.idNfe){
+            res.status(403).send({
+                message: 'Você deve ativar a sua conta no SEFAZ para emitir NFE'
+            });
+            return;
+        }
+
         request(file.xml, (error, response, body) => {
             if(error) throw new error;
             let xml = body.toString();
