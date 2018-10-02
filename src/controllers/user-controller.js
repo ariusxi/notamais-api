@@ -328,7 +328,8 @@ exports.authenticate = async(req, res, next) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                roles: user.roles
+                roles: user.roles,
+                company: client.idNfe
             }
         });
     }catch(e){
