@@ -304,11 +304,19 @@ exports.authenticate = async(req, res, next) => {
             user: user._id
         });
 
-        const client = await clientrepository.getByUser(user._id);
-
         let contract = {
             active: false,
             data: {}
+        };
+
+        let user_data = {
+            contract: contract,
+            firstlogin: firstlogin,
+            image: user.image,
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            roles: user.roles
         };
 
         if(user.roles[0] == 'user'){
@@ -319,11 +327,10 @@ exports.authenticate = async(req, res, next) => {
                 contract.active = true;
                 contract.data = ctnc;
             }
-        }
 
-        res.status(201).send({
-            token: token,
-            data: {
+            const client = await clientrepository.getByUser(user._id);
+
+            user_data = {
                 contract: contract,
                 firstlogin: firstlogin,
                 image: user.image,
@@ -333,6 +340,11 @@ exports.authenticate = async(req, res, next) => {
                 roles: user.roles,
                 company: client.idNfe
             }
+        }
+
+        res.status(201).send({
+            token: token,
+            data: user_data
         });
     }catch(e){
         res.status(500).send({
