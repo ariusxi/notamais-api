@@ -10,3 +10,11 @@ exports.concat = async(arr1, arr2) => {
     }
     return newArr;
 }
+
+exports.generateProtocol = (length) => {
+    let protocol = "";
+    for(var i = 0; i < length; i++){
+        protocol +=  Math.floor((Math.random() * 9) + 1);
+    }
+    return protocol;
+}

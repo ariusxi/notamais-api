@@ -1,6 +1,7 @@
 'use strict';
 
 const repository = require('../repositories/relationship-repository');
+const userrepository = require('../repositories/user-repository');
 const config = require('../config');
 
 const emailService = require('../services/email-service');
@@ -55,6 +56,9 @@ exports.getByCounter = async(req, res, next) => {
 
 exports.create = async(req, res, next) => {
     try{
+        let counter = await userrepository.getById(req.body.counter);
+        let user = await  userrepository.getById(req.body.user);
+
         await repository.save({
             user: req.body.user,
             counter: req.body.counter,
@@ -62,7 +66,13 @@ exports.create = async(req, res, next) => {
             approved: false
         });
 
-        res.status(200).send({
+        emailService.send(
+            counter.email,
+            'Você recebeu uma solicitação',
+            'Olá '+counter.name+', você acaba de receber uma solicitação de contratação da Empresa '+user.name+', para aceitar essa solicitação acesse o painel'
+        );
+
+        res.status(201).send({
             message: 'Solitação enviada com sucesso'
         });
     }catch(e){

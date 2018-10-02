@@ -37,6 +37,11 @@ exports.putNfe = async(id, nfe) => {
     return res;
 }
 
+exports.putDanfe = async(data, id) => {
+    const res = File.updateOne({ _id: id }, { danfe: data.url });
+    return res;
+}
+
 exports.delete = async(id) => {
     await File.findByIdAndRemove(id, (err) => {
         console.log(err);
