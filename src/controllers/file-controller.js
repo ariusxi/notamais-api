@@ -381,7 +381,6 @@ exports.generateDanfe = async(req, res, next) => {
                 if(err){ 
                     console.log(err);
                 }else{
-                    console.log(pathDoArquivo);
                     pdf.pipe(fs.createWriteStream(pathDoArquivo));
 
                     let formData = {
@@ -389,17 +388,18 @@ exports.generateDanfe = async(req, res, next) => {
                         file: fs.createReadStream(pathDoArquivo)
                     };
 
+                    console.log(formData.file);
+
                     request.post({
                         url: 'http://cdnnotamais.com/',
                         formData: formData,
                         "rejectUnauthorized": false
                     }, async(err, httpResponse, body) => {
+                        console.log(body);
                         if(err){ 
                             console.error(err);
                         }else{
                             let response = JSON.parse(body);
-
-                            console.log(response);
 
                             await repository.putDanfe({
                                 url: "http://cdnnotamais.com" + response.url
