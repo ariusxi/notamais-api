@@ -85,6 +85,14 @@ exports.put = async(req, res, next) => {
             req.body.promotion = 0;
         }
 
+        if(req.body.promotion != ""){
+            req.body.promotion = parseFloat(req.body.promotion);
+        }
+
+        if(isNaN(req.body.promotion)){
+            req.body.promotion = 0;
+        }
+
         await repository.update(req.params.id, req.body);
 
         res.status(200).send({
