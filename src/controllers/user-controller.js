@@ -324,6 +324,7 @@ exports.authenticate = async(req, res, next) => {
             data: {
                 contract: contract,
                 firstlogin: firstlogin,
+                image: user.image,
                 id: user._id,
                 email: user.email,
                 name: user.name,
