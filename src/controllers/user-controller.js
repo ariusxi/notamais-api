@@ -346,13 +346,13 @@ exports.authenticate = async(req, res, next) => {
             token: token,
             data: user_data
         });
+    
     }catch(e){
         res.status(500).send({
             message: 'Falha ao processar sua requisição',
             data: e
         });
     }
-    
 }
 
 exports.refreshToken = async(req, res, next) => {
