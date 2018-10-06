@@ -9,6 +9,23 @@ const clientrepository = require('../repositories/client-repository');
 const employeerepository = require('../repositories/employee-repository');
 const relationshiprepository = require('../repositories/relationship-repository');
 const filerepository = require('../repositories/file-repository');
+
+//Repositories do nfe
+const destrepository = require('../repositories/dest-repository');
+const detrepository = require('../repositories/det-repository');
+const emitrepository = require('../repositories/emit-repository');
+const enderrepository = require('../repositories/ender-repository');
+const icmsrepository = require('../repositories/icms-repository');
+const iderepository = require('../repositories/ide-repository');
+const impostorepository = require('../repositories/imposto-repository');
+const infnferepository = require('../repositories/inf-nfe-repository');
+const nferepository = require('../repositories/nfe-repository');
+const prodrepository = require('../repositories/prod-repository');
+const totalrepository = require('../repositories/total-repository');
+const transprepository = require('../repositories/transp-repository');
+const ipirepository = require('../repositories/ipi-repository');
+
+//Bibliotecas
 const nfe = require('nfe-io')('14jQsE8CpQ1lhtR934h7q49qAueUcoBef10CgzWZqTdjZXIiLHKpIy2F8fCBL10rkEw');
 const request = require('request');
 const path = require('path');
@@ -146,24 +163,308 @@ exports.post = async(req, res, next) => {
             }, async(err, httpResponse, body) => {
                 let response = JSON.parse(body);
 
-                await repository.post({
-                    name: req.body.name,
-                    description: req.body.description,
-                    date: Date.now(),
-                    xml: "http://cdnnotamais.com" + response.url,
-                    user: company
-                });
-
                 fs.unlink(name, (err) => {
                     if (err) throw err;
                     console.log(name+' was deleted');
                 });
 
-                res.status(201).send({
-                    message: 'Arquivo enviado com sucesso',
-                    path: "http://cdnnotamais.com" + response.url
-                });
+                let url = response.url;
 
+                request("http://cdnnotamais.com" + response.url, async(error, response, body) => {
+                    if(error){
+                        res.status(500).send({
+                            data: 'Falha ao processar sua requisição',
+                            data: error
+                        });
+                        return;
+                    }
+
+                    let xml = body.toString();
+                    let json = parser.toJson(xml);
+                    json = JSON.parse(json);
+                    json = json.NFe.infNFe;
+
+                    await enderrepository.create({
+                        cep: json.emit.enderEmit.CEP,
+                        uf: json.emit.enderEmit.UF,
+                        cMun: json.emit.enderEmit.cMun,
+                        cPais: json.emit.enderEmit.cPais,
+                        nro: json.emit.enderEmit.nro,
+                        xBairro: json.emit.enderEmit.xBairro,
+                        xLgr: json.emit.enderEmit.xLgr,
+                        xMun:  json.emit.enderEmit.xMun,
+                        xPais: json.emit.enderEmit.xPais
+                    });
+    
+                    const ender1 = await enderrepository.getByData({
+                        cep: json.emit.enderEmit.CEP,
+                        uf: json.emit.enderEmit.UF,
+                        cMun: json.emit.enderEmit.cMun,
+                        cPais: json.emit.enderEmit.cPais,
+                        nro: json.emit.enderEmit.nro,
+                        xBairro: json.emit.enderEmit.xBairro,
+                        xLgr: json.emit.enderEmit.xLgr,
+                        xMun:  json.emit.enderEmit.xMun,
+                        xPais: json.emit.enderEmit.xPais
+                    });
+    
+                    await emitrepository.create({
+                        xNome: json.emit.xNome,
+                        cnpj: json.emit.CNPJ,
+                        ie: json.emit.IE,
+                        crt: json.emit.CRT,
+                        ender: ender1._id
+                    });
+    
+                    const emit = await emitrepository.getByData({
+                        xNome: json.emit.xNome,
+                        cnpj: json.emit.CNPJ,
+                        ie: json.emit.IE,
+                        crt: json.emit.CRT,
+                        ender: ender1._id
+                    });
+    
+                    await enderrepository.create({
+                        cep: json.dest.enderDest.CEP,
+                        uf: json.dest.enderDest.UF,
+                        cMun: json.dest.enderDest.cMun,
+                        cPais: json.dest.enderDest.cPais,
+                        nro: json.dest.enderDest.nro,
+                        xBairro: json.dest.enderDest.xBairro,
+                        xLgr: json.dest.enderDest.xLgr,
+                        xMun:  json.dest.enderDest.xMun,
+                        xPais: json.dest.enderDest.xPais
+                    });
+    
+                    const ender2 = await enderrepository.getByData({
+                        cep: json.dest.enderDest.CEP,
+                        uf: json.dest.enderDest.UF,
+                        cMun: json.dest.enderDest.cMun,
+                        cPais: json.dest.enderDest.cPais,
+                        nro: json.dest.enderDest.nro,
+                        xBairro: json.dest.enderDest.xBairro,
+                        xLgr: json.dest.enderDest.xLgr,
+                        xMun:  json.dest.enderDest.xMun,
+                        xPais: json.dest.enderDest.xPais
+                    });
+    
+                    await destrepository.create({
+                        cpfcnpj: json.dest.CNPJ,
+                        ie: json.dest.IE,
+                        xNome: json.dest.xNome,
+                        indEDest: json.dest.indIEDest,
+                        ender: ender2._id
+                    });
+    
+                    const dest = await destrepository.getByData({
+                        cpfcnpj: json.dest.CNPJ,
+                        ie: json.dest.IE,
+                        xNome: json.dest.xNome,
+                        indEDest: json.dest.indIEDest,
+                        ender: ender2._id
+                    });
+    
+                    await totalrepository.create({
+                        vBC: json.total.ICMSTot.vBC,
+                        vICMS: json.total.ICMSTot.vICMS,
+                        vICMSDeson: json.total.ICMSTot.vICMSDeson,
+                        vBCST: json.total.ICMSTot.vBCST,
+                        vST: json.total.ICMSTot.vST,
+                        vProd: json.total.ICMSTot.vProd,
+                        vFrete: json.total.ICMSTot.vFrete,
+                        vSeg: json.total.ICMSTot.vSeg,
+                        vII: json.total.ICMSTot.vII,
+                        vIPI: json.total.ICMSTot.vIPI,
+                        vPIS: json.total.ICMSTot.vPIS,
+                        vCOFINS: json.total.ICMSTot.vCOFINS,
+                        vOutro: json.total.ICMSTot.vOutro,
+                        vNF: json.total.ICMSTot.vNF
+                    });
+    
+                    const total = await totalrepository.getByData({
+                        vBC: json.total.ICMSTot.vBC,
+                        vICMS: json.total.ICMSTot.vICMS,
+                        vICMSDeson: json.total.ICMSTot.vICMSDeson,
+                        vBCST: json.total.ICMSTot.vBCST,
+                        vST: json.total.ICMSTot.vST,
+                        vProd: json.total.ICMSTot.vProd,
+                        vFrete: json.total.ICMSTot.vFrete,
+                        vSeg: json.total.ICMSTot.vSeg,
+                        vII: json.total.ICMSTot.vII,
+                        vIPI: json.total.ICMSTot.vIPI,
+                        vPIS: json.total.ICMSTot.vPIS,
+                        vCOFINS: json.total.ICMSTot.vCOFINS,
+                        vOutro: json.total.ICMSTot.vOutro,
+                        vNF: json.total.ICMSTot.vNF
+                    });
+    
+                    await iderepository.create({
+                        cMunFG: json.ide.cMunFG,
+                        cUF: json.ide.cUF,
+                        dhEmi: json.ide.dhEmi,
+                        finNFe: json.ide.finNFe,
+                        idDest: json.ide.idDest,
+                        indFinal: json.ide.indFinal,
+                        indPag: json.ide.indPag,
+                        indPres: json.ide.indPres,
+                        mod: json.ide.mod,
+                        natOp: json.ide.natOp,
+                        procEmit: json.ide.procEmi,
+                        serie: json.ide.serie,
+                        tpAmb: json.ide.tpAmb,
+                        tpNF: json.ide.tpNF
+                    });
+    
+                    const ide = await iderepository.getByData({
+                        cMunFG: json.ide.cMunFG,
+                        cUF: json.ide.cUF,
+                        dhEmi: json.ide.dhEmi,
+                        finNFe: json.ide.finNFe,
+                        idDest: json.ide.idDest,
+                        indFinal: json.ide.indFinal,
+                        indPag: json.ide.indPag,
+                        indPres: json.ide.indPres,
+                        mod: json.ide.mod,
+                        natOp: json.ide.natOp,
+                        procEmit: json.ide.procEmi,
+                        serie: json.ide.serie,
+                        tpAmb: json.ide.tpAmb,
+                        tpNF: json.ide.tpNF
+                    });
+    
+                    await transprepository.create({
+                        cnpj: json.emit.CNPj,
+                        ie: json.emit.IE,
+                        xNome: json.emit.xNome,
+                        modFrete: json.transp.modFrete,
+                        xMun:  json.emit.enderEmit.xMun,
+                        uf: json.emit.enderEmit.UF
+                    });
+    
+                    const transp = await transprepository.getByData({
+                        cnpj: json.emit.CNPj,
+                        ie: json.emit.IE,
+                        xNome: json.emit.xNome,
+                        modFrete: json.transp.modFrete,
+                        xMun:  json.emit.enderEmit.xMun,
+                        uf: json.emit.enderEmit.UF
+                    });
+    
+                    await ipirepository.create({
+                        cEnq: json.det.imposto.IPI.cEnq
+                    });
+    
+                    const ipi = await ipirepository.getByData({
+                        cEnq: json.det.imposto.IPI.cEnq
+                    });
+    
+                    await icmsrepository.create({
+                        origin: json.det.imposto.ICMS.ICMS00.origin,
+                        modBC: json.det.imposto.ICMS.ICMS00.modBC,
+                        pICMSST: json.det.imposto.ICMS.ICMS00.pICMS,
+                        vICMSST: json.det.imposto.ICMS.ICMS00.vICMS
+                    });
+    
+                    const icms = await icmsrepository.getByData({
+                        origin: json.det.imposto.ICMS.ICMS00.origin,
+                        modBC: json.det.imposto.ICMS.ICMS00.modBC,
+                        pICMSST: json.det.imposto.ICMS.ICMS00.pICMS,
+                        vICMSST: json.det.imposto.ICMS.ICMS00.vICMS
+                    });
+    
+                    await impostorepository.create({
+                        CST: json.det.imposto.ICMS.ICMS00.CST,
+                        vBC: json.det.imposto.COFINSST.vBC,
+                        valor: json.det.imposto.vTotTrib,
+                        ipi: ipi._id,
+                        icms: icms._id
+                    })
+    
+                    const imposto = await impostorepository.getByData({
+                        CST: json.det.imposto.ICMS.ICMS00.CST,
+                        vBC: json.det.imposto.COFINSST.vBC,
+                        valor: json.det.imposto.vTotTrib,
+                        ipi: ipi._id,
+                        icms: icms._id
+                    });
+    
+                    await prodrepository.create({
+                        cfop: json.det.prod.CFOP,
+                        ncm: json.det.prod.NCM,
+                        cProd: json.det.prod.cProd,
+                        indTot: json.det.prod.indTot,
+                        qCom: json.det.prod.qCom,
+                        qTrib: json.det.prod.qTrib,
+                        uCom: json.det.prod.uCom,
+                        uTrib: json.det.prod.uTrib,
+                        vProd: json.det.prod.vProd,
+                        vUnCom: json.det.prod.vUnCom,
+                        vUnTrib: json.det.prod.vUnTrib,
+                        xProd: json.det.prod.xProd
+                    });
+    
+                    const prod = await prodrepository.getByData({
+                        cfop: json.det.prod.CFOP,
+                        ncm: json.det.prod.NCM,
+                        cProd: json.det.prod.cProd,
+                        indTot: json.det.prod.indTot,
+                        qCom: json.det.prod.qCom,
+                        qTrib: json.det.prod.qTrib,
+                        uCom: json.det.prod.uCom,
+                        uTrib: json.det.prod.uTrib,
+                        vProd: json.det.prod.vProd,
+                        vUnCom: json.det.prod.vUnCom,
+                        vUnTrib: json.det.prod.vUnTrib,
+                        xProd: json.det.prod.xProd
+                    });
+    
+                    await detrepository.create({
+                        nItem: '1',
+                        prod: prod._id,
+                        imposto: imposto._id
+                    });
+    
+                    const det = detrepository.getByData({
+                        nItem: '1',
+                        prod: prod._id,
+                        imposto: imposto._id
+                    });
+    
+                    await infnferepository.create({
+                        versao: json.versao,
+                        ide: ide._id,
+                        total: total._id,
+                        dest: dest._id,
+                        emite: emit._id,
+                        transp: transp._id,
+                        ide: ide._id,
+                        dest: dest._id
+                    });
+    
+                    const infnfe = await infnferepository.getByData({
+                        versao: json.versao,
+                        ide: ide._id,
+                        total: total._id,
+                        dest: dest._id,
+                        emite: emit._id,
+                        transp: transp._id,
+                        ide: ide._id,
+                        dest: dest._id
+                    });
+
+                    await repository.post({
+                        name: req.body.name,
+                        description: req.body.description,
+                        date: Date.now(),
+                        xml: "http://cdnnotamais.com" + url,
+                        user: company
+                    });
+
+                    res.status(201).send({
+                        message: 'Arquivo enviado com sucesso',
+                        path: "http://cdnnotamais.com" + url
+                    });    
+                });
             });
 
         });

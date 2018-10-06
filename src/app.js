@@ -29,6 +29,18 @@ const File = require('./models/file-model');
 const Payment = require('./models/payment-model');
 const Relationship = require('./models/relationship-model');
 const NFe  = require('./models/nfe-model');
+const Imposto = require('./models/imposto-model');
+const Dest = require('./models/dest-model');
+const Det = require('./models/det-model');
+const Emit = require('./models/emit-model');
+const Ender = require('./models/ender-model');
+const ICMS = require('./models/icms-model');
+const IPI = require('./models/ipi-model');
+const IDE = require('./models/ide-model');
+const infNFe = require('./models/inf-nfe-model');
+const Prod = require('./models/prod-model');
+const Total = require('./models/total-model');
+const Trasp = require('./models/transp-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');

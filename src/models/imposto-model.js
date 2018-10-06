@@ -4,24 +4,26 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    registro: {
-        type: Date
-    },
-    cod: {
+    CST:{
         type: String
     },
-    xml: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'File'
+    vBC: {
+        type: String
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+    valor: {
+        type: String
     },
-    idInfNFe: {
+    percent: {
+        type: String
+    },
+    ipi: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'idInfNFe'
+        ref: 'IPI'
+    },
+    icms: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ICMS'
     }
 });
 
-module.exports = mongoose.model('NFe', schema);
+module.exports = mongoose.model('Imposto', schema);
