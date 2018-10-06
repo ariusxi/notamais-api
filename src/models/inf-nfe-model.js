@@ -34,6 +34,14 @@ const schema = new Schema({
     dest: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Dest'
+    },
+    file: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'File'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 

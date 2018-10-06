@@ -429,7 +429,22 @@ exports.post = async(req, res, next) => {
                         prod: prod._id,
                         imposto: imposto._id
                     });
-    
+
+                    await repository.post({
+                        name: req.body.name,
+                        description: req.body.description,
+                        date: Date.now(),
+                        xml: "http://cdnnotamais.com" + url,
+                        user: company
+                    });
+
+                    const file = await repository.getByData({
+                        name: req.body.name,
+                        description: req.body.description,
+                        xml: "http://cdnnotamais.com" + url,
+                        user: company
+                    });
+
                     await infnferepository.create({
                         versao: json.versao,
                         ide: ide._id,
@@ -438,9 +453,11 @@ exports.post = async(req, res, next) => {
                         emite: emit._id,
                         transp: transp._id,
                         ide: ide._id,
-                        dest: dest._id
+                        dest: dest._id,
+                        file: file._id,
+                        user: company
                     });
-    
+
                     const infnfe = await infnferepository.getByData({
                         versao: json.versao,
                         ide: ide._id,
@@ -449,14 +466,8 @@ exports.post = async(req, res, next) => {
                         emite: emit._id,
                         transp: transp._id,
                         ide: ide._id,
-                        dest: dest._id
-                    });
-
-                    await repository.post({
-                        name: req.body.name,
-                        description: req.body.description,
-                        date: Date.now(),
-                        xml: "http://cdnnotamais.com" + url,
+                        dest: dest._id,
+                        file: file._id,
                         user: company
                     });
 
@@ -475,6 +486,18 @@ exports.post = async(req, res, next) => {
         });
     }
     
+}
+
+exports.getAll = async(req, res, next) => {
+    try{
+        var data = infnferepository.getAll(req.params.id);
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
 }
 
 exports.generateCompany = async(req, res, next) =>  {
