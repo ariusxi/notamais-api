@@ -32,6 +32,10 @@ const schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    infnfe: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'infNFe'
     }
 });
 

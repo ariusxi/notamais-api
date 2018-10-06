@@ -25,7 +25,7 @@ exports.getByUser = async(user) =>  {
 }
 
 exports.getByCounter = async(counter) => {
-    const res = await Relationship.findOne({
+    const res = await Relationship.find({
         counter: counter
     })
     .populate("user")
