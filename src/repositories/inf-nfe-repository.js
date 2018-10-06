@@ -8,6 +8,20 @@ exports.get = async(id) => {
     return res;
 }
 
+exports.getAll = async(id) => {
+    const res = await infNFe.find({
+        user: id
+    })
+    .populate("ide")
+    .populate("total")
+    .populate("dest")
+    .populate("emite")
+    .populate("transp")
+    .populate("file")
+    .populate("user");
+    return res;
+}
+
 exports.getByData = async(data) => {
     const res = await infNFe.findOne({
         versao: data.versao,

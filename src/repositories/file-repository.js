@@ -10,6 +10,16 @@ exports.get = async(id) => {
     return res;
 }
 
+exports.getByData = async(data) => {
+    const res = await File.findOne({
+        name: data.name,
+        description: data.description,
+        xml: data.xml,
+        user: data.user
+    });
+    return res;
+}
+
 exports.getById = async(id) => {
     const res = await File.findById(id);
     return res;
