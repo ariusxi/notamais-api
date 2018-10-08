@@ -490,7 +490,32 @@ exports.post = async(req, res, next) => {
 
 exports.getAll = async(req, res, next) => {
     try{
-        var data = infnferepository.getAll(req.params.id);
+        let user = await userrepository.getById(req.params.id);
+        let company = req.params.id;
+
+        if(user.roles[0] == 'employee'){
+            let companyprofile = await employeerepository.getByPerson(req.params.id);
+            company = companyprofile.user._id;
+        }
+        if(user.roles[0] == 'counter'){
+            let companyprofile = await relationshiprepository.getByCounter(req.params.id);
+            company = companyprofile[0].user._id;
+        }
+
+        var begin = req.body.begin;
+        var end = req.body.end;
+
+        if(begin == undefined)
+            begin = new Date('1990-12-01');
+        else
+            begin = new Date(begin);
+
+        if(end == undefined)
+            end = new Date('2090-12-01');
+        else
+            end = new Date(end);
+
+        var data = await infnferepository.getAll(begin, end, company);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({

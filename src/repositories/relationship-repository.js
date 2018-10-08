@@ -34,7 +34,7 @@ exports.getByCounter = async(counter) => {
 }
 
 exports.getByBoth = async(user, counter) => {
-    const res = await Relationship.find({
+    const res = await Relationship.findOne({
         counter: counter,
         user: user
     })

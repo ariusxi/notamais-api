@@ -8,8 +8,12 @@ exports.get = async(id) => {
     return res;
 }
 
-exports.getAll = async(id) => {
+exports.getAll = async(begin, end, id) => {
     const res = await infNFe.find({
+        date: {
+            $gte: begin,
+            $lt: end
+        },
         user: id
     })
     .populate("ide")
