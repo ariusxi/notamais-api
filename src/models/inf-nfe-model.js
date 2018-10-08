@@ -7,6 +7,9 @@ const schema = new Schema({
     versao: {
         type: String
     },
+    date: {
+        type: Date
+    },
     ide: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'IDE'

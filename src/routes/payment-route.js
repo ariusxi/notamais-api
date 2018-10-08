@@ -9,7 +9,7 @@ const authService = require('../services/auth-service');
 
 //definindo cada tipo de requisição
 router.get('/', authService.isAdmin, controller.get);
-router.get('/:id', authService.isAdmin, controller.getById);
+router.get('/get/:id', authService.isAdmin, controller.getById);
 router.get('/user/:id', authService.isAdmin, controller.getByUser);
 router.post('/create', authService.isAdmin, controller.post);
 

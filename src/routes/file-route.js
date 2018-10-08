@@ -12,8 +12,8 @@ router.get('/get/:id', authService.authorize, controller.getById);
 router.get('/fetch-all', authService.isAdmin, controller.getAdmin);
 router.get('/danfe/:id', authService.authorize, controller.generateDanfe);
 router.get('/generate-company/:id', authService.authorize, controller.generateCompany);
-router.get('/values/:id', authService.authorize, controller.getAll);
 router.get('/nfe/:id', authService.authorize, controller.generateNfe);
+router.post('/values/:id', authService.authorize, controller.getAll);
 router.post('/send/:id', authService.authorize, controller.post);
 router.delete('/delete/:id', authService.authorize, controller.delete);
 
