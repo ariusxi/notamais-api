@@ -46,7 +46,7 @@ exports.get = async(req, res, next) => {
         }
         if(user.roles[0] == 'counter'){
             let companyprofile = await relationshiprepository.getByCounter(req.params.id);
-            company = companyprofile.user._id;
+            company = companyprofile[0].user._id;
         }
 
         var data = await repository.get(company);

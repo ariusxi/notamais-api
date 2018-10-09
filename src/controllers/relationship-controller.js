@@ -32,7 +32,7 @@ exports.getById = async(req, res, next) => {
 
 exports.getByUser = async(req, res, next) => {
     try{
-        var data = await repository.getByUser(req.params.id);
+        var data = await repository.getByUserNon(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -44,7 +44,7 @@ exports.getByUser = async(req, res, next) => {
 
 exports.getByCounter = async(req, res, next) => {
     try{
-        var data = await repository.getByCounter(req.params.id);
+        var data = await repository.getByCounterNon(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
