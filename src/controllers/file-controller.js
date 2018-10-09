@@ -733,39 +733,38 @@ exports.generateDanfe = async(req, res, next) => {
                 }else{
                     pdf.pipe(fs.createWriteStream(pathDoArquivo));
 
-                    let formData = {
-                        folder: 'danfe',
-                        file: fs.createReadStream(pathDoArquivo)
-                    };
+                    setTimeout(function(){
+                        let formData = {
+                            folder: 'danfe',
+                            file: fs.createReadStream(pathDoArquivo)
+                        };
 
-                    console.log(formData.file);
+                        request.post({
+                            url: 'http://cdnnotamais.com/',
+                            formData: formData,
+                            "rejectUnauthorized": false
+                        }, async(err, httpResponse, body) => {
+                            if(err){ 
+                                console.error(err);
+                            }else{
+                                let response = JSON.parse(body);
 
-                    request.post({
-                        url: 'http://cdnnotamais.com/',
-                        formData: formData,
-                        "rejectUnauthorized": false
-                    }, async(err, httpResponse, body) => {
-                        console.log(body);
-                        if(err){ 
-                            console.error(err);
-                        }else{
-                            let response = JSON.parse(body);
+                                await repository.putDanfe({
+                                    url: "http://cdnnotamais.com" + response.url
+                                }, req.params.id);
 
-                            await repository.putDanfe({
-                                url: "http://cdnnotamais.com" + response.url
-                            }, req.params.id);
+                                fs.unlink(pathDoArquivo, (err) => {
+                                    if(err) throw err;
+                                    console.log(pathDoArquivo + ' was deleted');
+                                });
 
-                            fs.unlink(pathDoArquivo, (err) => {
-                                if(err) throw err;
-                                console.log(pathDoArquivo + ' was deleted');
-                            });
-
-                            res.status(201).send({
-                                message: 'Danfe gerada com sucesso',
-                                url: "http://cdnnotamais.com" + response.url
-                            });
-                        }
-                    });
+                                res.status(201).send({
+                                    message: 'Danfe gerada com sucesso',
+                                    url: "http://cdnnotamais.com" + response.url
+                                });
+                            }
+                        });
+                    }, 1000);
                 }
             });
     });
