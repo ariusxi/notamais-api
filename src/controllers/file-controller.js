@@ -505,12 +505,12 @@ exports.getAll = async(req, res, next) => {
         var begin = req.body.begin;
         var end = req.body.end;
 
-        if(begin == undefined)
+        if(begin == undefined || begin == "")
             begin = new Date('1990-12-01');
         else
             begin = new Date(begin);
 
-        if(end == undefined)
+        if(end == undefined || end == "")
             end = new Date('2090-12-01');
         else
             end = new Date(end);
