@@ -69,6 +69,25 @@ exports.searchCounters = async(req, res, next) =>  {
     }
 }
 
+exports.searchCounterView = async(req, res, next) => {
+    try{
+        var data = await repository.getById(req.params.id);
+        var profile = await personrepository.getByUser(req.params.id);
+        var jobs = await relationshiprepository.getByCounter(req.params.id);
+
+        res.status(200).send({
+            data: data,
+            profile: profile,
+            jobs: jobs
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.post = async(req, res, next) => {
     let contract = new ValidationContract();
 
