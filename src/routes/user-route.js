@@ -24,6 +24,7 @@ router.get('/fetch-all', authService.isAdmin, controller.get);
 router.get('/block/:id', authService.isAdmin, controller.block);
 router.get('/get-profile/:id', authService.authorize, controller.getProfile);
 router.get('/get-user/:id', authService.isAdmin, controller.getProfile);
+router.get('/counter-view/:id', authService.authorize, controller.searchCounterView);
 router.post('/reset-password/:id', authService.authorize, controller.updatePassword);
 router.post('/update-profile/:id', authService.authorize, controller.updateProfile);
 router.post('/search-counter/:id', authService.authorize, controller.searchCounters);
