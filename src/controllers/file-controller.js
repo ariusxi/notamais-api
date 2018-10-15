@@ -581,7 +581,7 @@ exports.generateCompany = async(req, res, next) =>  {
 }
 
 exports.generateDanfe = async(req, res, next) => {
-    try{
+    
         let dan = require('danfe');
         let Gerador = dan.Gerador,
             Danfe = dan.Danfe,
@@ -776,12 +776,7 @@ exports.generateDanfe = async(req, res, next) => {
                     }
                 });
         });
-    }catch(e){
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
-    }
+    
 }
 
 exports.generateNfe = async(req, res, next) => {

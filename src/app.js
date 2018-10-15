@@ -53,6 +53,7 @@ const contractroute = require('./routes/contract-route');
 const fileroute = require('./routes/file-route');
 const paymentroute = require('./routes/payment-route');
 const relationshiproute = require('./routes/relationship-route');
+const authroute = require('./routes/auth-route');
 
 //Limitando tamanho da requisição
 app.use(bodyParser.json({
@@ -82,6 +83,7 @@ app.use('/contracts', contractroute);
 app.use('/files', fileroute);
 app.use('/payments', paymentroute);
 app.use('/relationships', relationshiproute);
+app.use('/auths', authroute);
 
 //Exportando APP
 module.exports = app;
