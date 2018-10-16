@@ -6,6 +6,9 @@ const repository = require('../repositories/auth-repository');
 exports.get = async(req, res, next) => {
     try{
         var data = await repository.get();
+        data = data.filter((value, i, data) => {
+            return value.user != null;
+        });
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
