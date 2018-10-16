@@ -116,6 +116,9 @@ exports.post = async(req, res, next) => {
 
         let name = req.files.file.name;
 
+        req.body.name = name;
+        req.body.description = name;
+
         let ext = req.files.file.name.split(".")[1];
         let file = req.files.file;
         name = folder + "/../../cache/" + md5(Date.now()) + "." + ext;
@@ -581,7 +584,7 @@ exports.generateCompany = async(req, res, next) =>  {
 }
 
 exports.generateDanfe = async(req, res, next) => {
-    
+    try{
         let dan = require('danfe');
         let Gerador = dan.Gerador,
             Danfe = dan.Danfe,
@@ -776,7 +779,12 @@ exports.generateDanfe = async(req, res, next) => {
                     }
                 });
         });
-    
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
 }
 
 exports.generateNfe = async(req, res, next) => {
