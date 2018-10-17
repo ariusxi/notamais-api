@@ -41,6 +41,7 @@ const infNFe = require('./models/inf-nfe-model');
 const Prod = require('./models/prod-model');
 const Total = require('./models/total-model');
 const Trasp = require('./models/transp-model');
+const Evaluation = require('./models/evaluation-model');
 
 //Carregando rotas
 const indexroute = require('./routes/index-route');
@@ -54,6 +55,7 @@ const fileroute = require('./routes/file-route');
 const paymentroute = require('./routes/payment-route');
 const relationshiproute = require('./routes/relationship-route');
 const authroute = require('./routes/auth-route');
+const evaluationroute = require('./routes/evaluation-route');
 
 //Limitando tamanho da requisição
 app.use(bodyParser.json({
@@ -84,6 +86,7 @@ app.use('/files', fileroute);
 app.use('/payments', paymentroute);
 app.use('/relationships', relationshiproute);
 app.use('/auths', authroute);
+app.use('/evaluations', evaluationroute);
 
 //Exportando APP
 module.exports = app;
