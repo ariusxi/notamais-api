@@ -565,7 +565,8 @@ exports.generateCompany = async(req, res, next) =>  {
                     data: err
                 });
             }else{
-                let idNfe = entity.location.split("/")[2];
+                let idNfe = entity.location.split("/");
+                idNfe = idNfe[idNfe.length - 1];
 
                 await clientrepository.putNfeId(idNfe, req.params.id);
 
@@ -584,7 +585,7 @@ exports.generateCompany = async(req, res, next) =>  {
 }
 
 exports.generateDanfe = async(req, res, next) => {
-    try{
+    
         let dan = require('danfe');
         let Gerador = dan.Gerador,
             Danfe = dan.Danfe,
@@ -769,6 +770,8 @@ exports.generateDanfe = async(req, res, next) => {
                                         console.log(pathDoArquivo + ' was deleted');
                                     });
 
+                                    console.log("http://cdnnotamais.com" + response.url);
+
                                     res.status(201).send({
                                         message: 'Danfe gerada com sucesso',
                                         url: "http://cdnnotamais.com" + response.url
@@ -779,12 +782,6 @@ exports.generateDanfe = async(req, res, next) => {
                     }
                 });
         });
-    }catch(e){
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
-    }
 }
 
 exports.generateNfe = async(req, res, next) => {
