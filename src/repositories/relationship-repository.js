@@ -76,5 +76,7 @@ exports.accept = async(id) => {
 }
 
 exports.delete = async(id) =>  {
-    await Relationship.findByIdAndRemove(id);
+    await Relationship.findByIdAndRemove(id, (err) => {
+        console.log(err);
+    });
 }
