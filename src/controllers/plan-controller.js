@@ -50,6 +50,18 @@ exports.post = async(req, res, next) => {
             return;
         }
 
+        if(req.body.promotion == "" || !req.body.promotion){
+            req.body.promotion = 0;
+        }
+
+        if(req.body.promotion != ""){
+            req.body.promotion = parseFloat(req.body.promotion);
+        }
+
+        if(isNaN(req.body.promotion)){
+            req.body.promotion = 0;
+        }
+
         await repository.create({
             name: req.body.name,
             description: req.body.description,
