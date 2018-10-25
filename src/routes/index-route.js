@@ -9,6 +9,8 @@ router.get('/', controller.get);
 
 router.post('/', controller.post);
 
+router.post('/contact', controller.contact);
+
 router.get('/payment', controller.payment);
 
 router.get('/get-payment', controller.getPayment);

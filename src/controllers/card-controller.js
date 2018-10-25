@@ -29,10 +29,22 @@ exports.getById = async(req, res, next) => {
 exports.post = async(req, res, next) => {
     try{
         const card = await repository.getByNumber(req.body.CardNumber);
+        const year = Date.year();
+        const month = Date.month();
 
         if(card.length > 0){
             res.status(400).send({
                 message: 'Já existe um cartão cadastrado com esses dados'
+            });
+            return;
+        }
+
+        let creditmonth = parseInt(req.body.CardNumber.split("/")[0]);
+        let credityear = parseInt(req.body.CardNumber.split("/")[1]);       
+
+        if(credityear < year && creditmonth < month){
+            res.status(400).send({
+                message: 'Data de Expiração inválida'
             });
             return;
         }

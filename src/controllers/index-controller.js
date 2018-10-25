@@ -36,6 +36,26 @@ exports.post = async(req, res, next) => {
     }
 }
 
+exports.contact = async(req, res, next) => {
+    try{
+        let text = req.body.text + "<br/><br/> De: "+req.body.email;
+        emailService.send(
+            'ongjataimataatlanticao@gmail.com',
+            req.body.title,
+            global.EMAIL_TMPL.replace('{0}', text)
+        );
+
+        res.status(200).send({
+            message: 'Contato enviado com sucesso'
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
 exports.payment = async(req, res, next) => {
     var dadosSale = {  
         "MerchantOrderId":"2014111703",
