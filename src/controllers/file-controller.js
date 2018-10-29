@@ -517,8 +517,6 @@ exports.getAll = async(req, res, next) => {
         else
             end = new Date(req.body.end);
 
-        console.log(company);
-
         var data = await infnferepository.getAll(begin, end, company);
         res.status(200).send(data);
     }catch(e){

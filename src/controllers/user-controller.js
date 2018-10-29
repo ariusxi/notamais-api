@@ -57,7 +57,7 @@ exports.searchCounters = async(req, res, next) =>  {
             let request = await relationshiprepository.getByBoth(req.params.id, data[i]._id);
             let profile = await personrepository.getByUser(data[i]._id);
             data[i] = {'pending': 0, 'counter': data[i], 'profile' : profile };
-            if(request.length > 0)
+            if(request)
                 data[i] = {'pending': 1, 'counter': data[i].counter, 'profile' : profile };
         }
         res.status(200).send(data);
