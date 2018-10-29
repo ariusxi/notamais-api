@@ -505,18 +505,19 @@ exports.getAll = async(req, res, next) => {
             company = companyprofile[0].user._id;
         }
 
-        var begin = req.body.begin;
-        var end = req.body.end;
+        var begin, end;
 
         if(begin == undefined || begin == "")
             begin = new Date('1990-12-01');
         else
-            begin = new Date(begin);
+            begin = new Date(req.body.begin);
 
         if(end == undefined || end == "")
             end = new Date('2090-12-01');
         else
-            end = new Date(end);
+            end = new Date(req.body.end);
+
+        console.log(company);
 
         var data = await infnferepository.getAll(begin, end, company);
         res.status(200).send(data);
