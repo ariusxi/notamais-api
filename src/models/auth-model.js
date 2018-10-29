@@ -10,7 +10,7 @@ const schema = new Schema({
     },
     ip:  {
         type: String,
-        required: true
+        required: false
     },
     session: {
         type: String,

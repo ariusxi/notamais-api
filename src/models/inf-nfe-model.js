@@ -8,7 +8,8 @@ const schema = new Schema({
         type: String
     },
     date: {
-        type: Date
+        type: Date,
+        default: Date.now()
     },
     ide: {
         type: mongoose.Schema.Types.ObjectId,
