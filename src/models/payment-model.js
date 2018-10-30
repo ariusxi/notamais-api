@@ -20,6 +20,10 @@ const schema = new Schema({
         type: Number,
         required: true
     },
+    paymentType: {
+        type: String,
+        required: false
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

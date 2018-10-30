@@ -13,6 +13,7 @@ const employeerepository = require('../repositories/employee-repository');
 //Chamando services
 const emailService = require('../services/email-service');
 const smsService = require('../services/sms-service');
+const boletoService = require('../services/boleto-service');
 const cielo = require('cielo')(config.paramsCielo);
 
 exports.get = async(req, res, next) => {
@@ -99,11 +100,59 @@ exports.post = async(req, res, next) => {
         let user = await userrepository.getById(req.body.user);
         let plan = await planrepository.getById(req.body.plan);
         let cardType = req.body.cardType;
+        let paymentType = req.body.paymentType;
         let type = "creditCard";
         let validade = new Date();
         validade.setMonth(validade.getMonth() + 1);
         if(cardType != "CreditCard"){
             type = "debitCard";
+        }
+
+        if(paymentType == 'boleto'){
+            let boleto = boletoService.generate(plan);
+            if(boleto == 'error'){
+                res.status(400).send({
+                    message: 'Falha ao processar sua requisição'
+                });
+            }
+
+            setTimeout(() => {
+                let formData = {
+                    folder: 'boleto',
+                    file: fs.createReadStream(__dirname+"./../../boletos/"+boleto)
+                };
+
+                request.post({
+                    url: 'http://cdnnotamais.com/',
+                    formData: formData,
+                    "rejectUnauthorized": false
+                }, async(err, httpResponse, body) => {
+                    if(err){
+                        console.error(err);
+                    }else{
+                        let response = JSON.parse(body);
+
+                        fs.unlink(__dirname+"./../../boletos/"+boleto, (err) => {
+                            if(err) throw err;
+                            console.log(__dirname+"./../../boletos/"+boleto + ' was deleted');
+                        });
+
+                        console.log("http://cdnnotamais.com" + response.url);
+
+                        emailService.send(
+                            user.email,
+                            'Boleto de pagamento pendente',
+                            global.EMAIL_TMPL.replace('{0}', 'Olá <strong>'+user.name+'</strong>, seu plano '+plan.name+' esta com o boleto pendente, acesso o link abaixo para visualizar<br/>http://cdnnotamais.com' + response.url)
+                        );
+
+                        res.status(201).send({
+                            message: 'Boleto gerado com sucesso',
+                            url: "http://cdnnotamais.com" + response.url
+                        });
+                    }
+                })
+            }, 1000);
+            return;
         }
         
         await cardrepository.post({
@@ -226,12 +275,61 @@ exports.change = async(req, res, next) =>  {
         let plan = await planrepository.getById(req.body.plan);
         let card = {};
         let cardType = req.body.cardType;
+        let paymentType = req.body.paymentType;
         let type = "creditCard";
         let validade = new Date();
         validade.setMonth(validade.getMonth() + 1);
         if(cardType != "CreditCard"){
             type = "debitCard";
         }
+
+        if(paymentType == 'boleto'){
+            let boleto = boletoService.generate(plan);
+            if(boleto == 'error'){
+                res.status(400).send({
+                    message: 'Falha ao processar sua requisição'
+                });
+            }
+
+            setTimeout(() => {
+                let formData = {
+                    folder: 'boleto',
+                    file: fs.createReadStream(__dirname+"./../../boletos/"+boleto)
+                };
+
+                request.post({
+                    url: 'http://cdnnotamais.com/',
+                    formData: formData,
+                    "rejectUnauthorized": false
+                }, async(err, httpResponse, body) => {
+                    if(err){
+                        console.error(err);
+                    }else{
+                        let response = JSON.parse(body);
+
+                        fs.unlink(__dirname+"./../../boletos/"+boleto, (err) => {
+                            if(err) throw err;
+                            console.log(__dirname+"./../../boletos/"+boleto + ' was deleted');
+                        });
+
+                        console.log("http://cdnnotamais.com" + response.url);
+
+                        emailService.send(
+                            user.email,
+                            'Boleto de pagamento pendente',
+                            global.EMAIL_TMPL.replace('{0}', 'Olá <strong>'+user.name+'</strong>, seu plano '+plan.name+' esta com o boleto pendente, acesso o link abaixo para visualizar<br/>http://cdnnotamais.com' + response.url)
+                        );
+
+                        res.status(201).send({
+                            message: 'Boleto gerado com sucesso',
+                            url: "http://cdnnotamais.com" + response.url
+                        });
+                    }
+                })
+            }, 1000);
+            return;
+        }
+
         if(req.body.card){
             card = await cardrepository.getById(req.body.card);
             cardType = card.type;

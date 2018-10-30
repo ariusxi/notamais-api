@@ -28,6 +28,8 @@ exports.getByCounter = async(counter) => {
     const res = await Relationship.find({
         counter: counter
     })
+    .sort({'date': -1})
+    .limit(5)
     .populate("user")
     .populate("counter");
     return res;

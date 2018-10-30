@@ -2,6 +2,7 @@
 
 const config = require('../config');
 const emailService = require('../services/email-service');
+const boletoService = require('../services/boleto-service');
 const cielo = require('cielo')(config.paramsCielo);
 const path = require('path');
 const fs = require('fs');
@@ -339,6 +340,20 @@ exports.getContent = async(req, res, next) => {
             let xml = body.toString();
             let json = parser.toJson(xml);
             console.log(json);
+        });
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
+
+exports.boleto = async(req, res, next) => {
+    try{
+        boletoService.generate();
+        res.status(200).send({
+            message: 'Boleto gerado com sucesso'
         });
     }catch(e){
         res.status(500).send({
