@@ -23,4 +23,6 @@ router.get('/danfe', controller.danfeGen);
 
 router.get('/content', controller.getContent);
 
+router.get('/boleto', controller.boleto);
+
 module.exports = router;
