@@ -11,8 +11,7 @@ exports.generate = async() => {
     const boleto = {
         barcodeData: '23797726700000009997506091900000120800542910',
         digitableLine: '23797.50603 91900.000125 08005.429108 7 72670000000999',
-        paymentPlace:
-          'Pagável preferencialmente na rede Bradesco ou Bradesco Expresso.',
+        paymentPlace:  'Pagável preferencialmente na rede Bradesco ou Bradesco Expresso.',
         beneficiary: 'UNICRED FLORIANÓPOLIS - CNPJ: 074.064.502/0001-12',
         beneficiaryAddress:
           'Rua Tenete Silveira, 315 - Centro - Florianópolis - SC  - CEP 88010-301',

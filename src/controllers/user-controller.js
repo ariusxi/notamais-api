@@ -106,6 +106,7 @@ exports.post = async(req, res, next) => {
 
         if(emailUser){
             res.status(400).send({
+                success: false,
                 message: 'Já existe uma conta cadastrada com esse email'
             });
             return;
@@ -113,6 +114,7 @@ exports.post = async(req, res, next) => {
 
         if(cpfUser){
             res.status(400).send({
+                success: false,
                 message: 'Já existe uma conta cadastrada com esse cpf'
             });
             return;
@@ -153,10 +155,12 @@ exports.post = async(req, res, next) => {
         );
 
         res.status(201).send({
+            success: true,
             message: 'Cadastro efetuado com sucesso, por favor confirme o cadastro pelo email '+req.body.email
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha  ao processar sua requisição',
             data: e
         });
@@ -203,10 +207,12 @@ exports.postAdmin = async(req, res, next) => {
         );
 
         res.status(201).send({
+            success: true,
             message: 'Cadastro efetuado com sucesso'
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -231,6 +237,7 @@ exports.postCounter = async(req, res, next) => {
 
         if(emailUser){
             res.status(400).send({
+                success: false,
                 message: 'Já existe uma conta cadastrada com esse email'
             });
             return;
@@ -238,6 +245,7 @@ exports.postCounter = async(req, res, next) => {
 
         if(cpfUser){
             res.status(400).send({
+                success: false,
                 message: 'Já existe uma conta cadastrada com esse cpf'
             });
             return;
@@ -270,10 +278,12 @@ exports.postCounter = async(req, res, next) => {
         );
 
         res.status(201).send({
+            success: true,
             message: 'Cadastro efetuado com sucesso, por favor confirme o cadastro pelo email '+req.body.email
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -290,6 +300,7 @@ exports.authenticate = async(req, res, next) => {
 
         if(!user){
             res.status(400).send({
+                success: false,
                 message: 'Usuário ou Senha inválidos'
             });
             return;
@@ -297,6 +308,7 @@ exports.authenticate = async(req, res, next) => {
 
         if(user.active == false){
             res.status(400).send({
+                success: false,
                 message: 'Esse usuário ainda não foi ativado no sistema'
             });
             return;
@@ -362,11 +374,13 @@ exports.authenticate = async(req, res, next) => {
         }
 
         res.status(201).send({
+            success: true,
             token: token,
             data: user_data
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -382,6 +396,7 @@ exports.refreshToken = async(req, res, next) => {
 
         if(!user){
             res.status(401).send({
+                success: false,
                 message: 'Usuário não encontrado'
             });
             return;
@@ -396,6 +411,7 @@ exports.refreshToken = async(req, res, next) => {
 
         res.status(201).send({
             token: token,
+            success: true,
             data: {
                 email: user.email,
                 name: customer.name
@@ -403,6 +419,7 @@ exports.refreshToken = async(req, res, next) => {
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -426,6 +443,7 @@ exports.generateToken = async(req, res, next) => {
 
         if(!user){
             res.status(401).send({
+                success: false,
                 message: 'Usuário não encontrado'
             });
             return;
@@ -443,11 +461,13 @@ exports.generateToken = async(req, res, next) => {
         );
 
         res.status(200).send({
+            success: true,
             message: 'Token gerado com sucesso'
         });
 
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -469,6 +489,7 @@ exports.updatePasswordNonAuth = async(req, res, next) => {
 
         if(!token){
             res.status(401).send({
+                success: false,
                 message: 'Token inválido'
             });
         }
@@ -480,10 +501,12 @@ exports.updatePasswordNonAuth = async(req, res, next) => {
         await recoverrepository.used(req.params.token);
 
         res.status(201).send({
+            success: true,
             message: 'Senha atualizada com sucesso'
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -507,6 +530,7 @@ exports.updatePassword = async(req, res, next) => {
 
         if(!user){
             res.status(401).send({
+                success: false,
                 message: 'Usuário não encontrado'
             });
             return;
@@ -517,10 +541,12 @@ exports.updatePassword = async(req, res, next) => {
         await repository.resetPassword(password, req.params.id);
 
         res.status(201).send({
+            success: true,
             message: 'Senha atualizada com sucesso'
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -544,6 +570,7 @@ exports.updateProfile = async(req, res, next) => {
 
         if(!user){
             res.status(401).send({
+                success: false,
                 message: 'Usuário não encontrado'
             });
         }
@@ -574,10 +601,12 @@ exports.updateProfile = async(req, res, next) => {
         }
 
         res.status(201).send({
+            success: true,
             message: 'Perfil atualizado com sucesso'
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -590,6 +619,7 @@ exports.updateImage = async(req, res, next) =>  {
 
         if(!req.files){
             res.status(422).send({
+                success: false,
                 message: 'É necessário enviar um arquivo'
             });
             return;
@@ -604,6 +634,7 @@ exports.updateImage = async(req, res, next) =>  {
         file.mv(name, (error) =>  {
             if(error){
                 res.status(500).send({
+                    success: false,
                     message: 'Falha ao processar sua requisição',
                     data: error
                 });
@@ -653,6 +684,7 @@ exports.updateImage = async(req, res, next) =>  {
                 });
 
                 res.status(201).send({
+                    success: true,
                     message: 'Foto de perfil atualizada com sucesso',
                     path: "http://cdnnotamais.com" + response.url
                 });
@@ -661,6 +693,7 @@ exports.updateImage = async(req, res, next) =>  {
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -673,11 +706,13 @@ exports.confirmed = async(req, res, next) => {
         await repository.confirmed(req.params.id);
 
         res.status(201).send({
+            success: true,
             message: 'Perfil confirmado com sucesso'
         });
 
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -691,6 +726,7 @@ exports.activate = async(req, res, next) => {
 
         if(!user){
             res.status(401).send({
+                success: false,
                 message: 'Usuário não encontrado'
             });
             return;
@@ -699,11 +735,13 @@ exports.activate = async(req, res, next) => {
         await repository.activate(req.params.id);
 
         res.status(201).send({
+            success: true,
             message: 'Perfil ativado com sucesso'
         });
 
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
@@ -716,6 +754,7 @@ exports.block = async(req, res, next) => {
 
         if(!user){
             res.status(401).send({
+                success: false,
                 message: 'Usuário não encontrado'
             });
             return;
@@ -728,10 +767,12 @@ exports.block = async(req, res, next) => {
         await repository.block(req.params.id, block);
         
         res.status(201).send({
+            success: true,
             message: 'Status de perfil alterado com sucesso'
         });
     }catch(e){
         res.status(500).send({
+            success: false,
             message: 'Falha ao processar sua requisição',
             data: e
         });
