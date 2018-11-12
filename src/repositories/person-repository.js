@@ -37,3 +37,10 @@ exports.update = async(data, id) =>  {
     });
     return res;
 }
+
+exports.delete = async(id) => {
+    const res = await Person.remove({
+        user: id
+    });
+    return res;
+}

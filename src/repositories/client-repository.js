@@ -38,3 +38,10 @@ exports.putNfeId = async(nfe, id) => {
     });
     return res;
 }
+
+exports.delete = async(id) => {
+    const res = await Client.remove({
+        user: id
+    });
+    return res;
+}

@@ -29,4 +29,7 @@ router.post('/reset-password/:id', authService.authorize, controller.updatePassw
 router.post('/update-profile/:id', authService.authorize, controller.updateProfile);
 router.post('/search-counter/:id', authService.authorize, controller.searchCounters);
 
+//Rota para testes
+router.delete('/delete', authService.authorize, controller.delete);
+
 module.exports = router;

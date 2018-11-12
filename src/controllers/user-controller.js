@@ -778,3 +778,28 @@ exports.block = async(req, res, next) => {
         });
     }
 }
+
+exports.delete = async(req, res, next) => {
+    try{
+        //Pegando usuário pelo email
+        const user = await repository.getByEmail(req.body.email);
+        //Deletando perfil de usuário
+        await personrepository.delete(user._id);
+        //Deletando perfil de cliente
+        await clientrepository.delete(user._id);
+        //Deletando acesso de usuário
+        await repository.delete(user._id);
+
+
+        res.status(201).send({
+            success: true,
+            message: 'Usuário deletado com sucesso'
+        })
+    }catch(e){
+        res.status(500).send({
+            success: false,
+            message: 'Falha ao processar sua requisição',
+            data: e
+        });
+    }
+}
