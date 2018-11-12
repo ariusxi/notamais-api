@@ -95,3 +95,7 @@ exports.updateImage = async(data, id) => {
     });
     return res;
 }
+
+exports.delete = async(id) => {
+    await User.findByIdAndRemove(id);
+}
