@@ -5,12 +5,15 @@ const repository = require('../repositories/card-repository');
 exports.get = async(req, res, next) => {
     try{
         var data = await repository.get(req.params.id);
+        for(var value in data){
+            data[value].CardNumber = "**** **** " + data[value].CardNumber.substr(data[value].CardNumber.length - 4);
+        }
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
+            success: false,
+            message: 'Falha ao processar sua requisição'
+        })
     }
 }
 
