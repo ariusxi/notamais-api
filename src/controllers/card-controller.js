@@ -29,11 +29,11 @@ exports.getById = async(req, res, next) => {
 exports.post = async(req, res, next) => {
     try{
         //Tirando espaços do numbero de cartão
-        req.body.CardNumber = req.body.CardNumber.replace(" ", "");
+        req.body.CardNumber = req.body.CardNumber.split(" ").join("");
 
         const card = await repository.getByNumber(req.body.CardNumber);
-        const year = Date.year();
-        const month = Date.month();
+        const year = (new Date()).getFullYear();
+        const month = (new Date()).getMonth();
 
         if(card.length > 0){
             res.status(400).send({
@@ -43,9 +43,9 @@ exports.post = async(req, res, next) => {
         }
 
         let creditmonth = parseInt(req.body.ExpirationDate.split("/")[0]);
-        let credityear = parseInt(req.body.ExpirationDate.split("/")[1]);       
+        let credityear = parseInt(req.body.ExpirationDate.split("/")[1]);
 
-        if(credityear < year && creditmonth < month){
+        if(credityear < year || (creditmonth < month && credityear == year)){
             res.status(400).send({
                 message: 'Data de Expiração inválida'
             });
@@ -65,13 +65,14 @@ exports.post = async(req, res, next) => {
         });
 
         res.status(201).send({
+            success: true,
             message: 'Cartão cadastrado com sucesso'
         });
     }catch(e){
         res.status(500).send({
-            message: 'Falha ao processar sua requisição',
-            data: e
-        });
+            success: false,
+            message: 'Falha ao processar sua requisição'
+        })
     }
 }
 
