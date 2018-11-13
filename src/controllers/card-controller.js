@@ -28,6 +28,9 @@ exports.getById = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
+        //Tirando espaços do numbero de cartão
+        req.body.CardNumber = req.body.CardNumber.replace(" ", "");
+
         const card = await repository.getByNumber(req.body.CardNumber);
         const year = Date.year();
         const month = Date.month();
@@ -39,8 +42,8 @@ exports.post = async(req, res, next) => {
             return;
         }
 
-        let creditmonth = parseInt(req.body.CardNumber.split("/")[0]);
-        let credityear = parseInt(req.body.CardNumber.split("/")[1]);       
+        let creditmonth = parseInt(req.body.ExpirationDate.split("/")[0]);
+        let credityear = parseInt(req.body.ExpirationDate.split("/")[1]);       
 
         if(credityear < year && creditmonth < month){
             res.status(400).send({
