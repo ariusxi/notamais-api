@@ -168,14 +168,14 @@ exports.photo = async(req, res, next) => {
         }
 
         request.post({
-            url: 'https://cdn-notamais.herokuapp.com/' + qString,
+            url: 'http://cdnnotamais.com/' + qString,
             formData: formData,
             "rejectUnauthorized": false
         }, (err, httpResponse, body) => {
             let response = JSON.parse(body);
 
             res.status(200).send({
-                path: "https://cdn-notamais.herokuapp.com/" + response.url
+                path: "http://cdnnotamais.com/" + response.url
             });
         });
 

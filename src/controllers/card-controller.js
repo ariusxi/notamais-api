@@ -31,7 +31,7 @@ exports.getById = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
     try{
-        //Tirando espaços do numbero de cartão
+        //Tirando espaços do numero de cartão
         req.body.CardNumber = req.body.CardNumber.split(" ").join("");
 
         const card = await repository.getByNumber(req.body.CardNumber);
