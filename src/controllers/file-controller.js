@@ -564,7 +564,7 @@ exports.generateCompany = async(req, res, next) =>  {
                     data: err
                 });
             }else{
-                let idNfe = entity.location.split("/");
+                var idNfe = entity.location.split("/");
                 idNfe = idNfe[idNfe.length - 1];
 
                 await clientrepository.putNfeId(idNfe, req.params.id);
