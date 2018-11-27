@@ -66,6 +66,7 @@ exports.test = async(req, res, next) => {
         validade.setDate(validade.getDate() + 7);
 
         const user = await userrepository.getById(req.body.user);
+        const client = await clientrepository.getByUser(req.body.user);
 
         emailService.send(
             user.email,
